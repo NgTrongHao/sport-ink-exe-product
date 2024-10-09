@@ -4,13 +4,14 @@
     "slug": "sport-ink-exe-product-mobile-ui",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-logo.png",
+    "backgroundColor": "#FFF6EA",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      // "image": "./assets/images/splash-screen.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#d97706"
+      "image": "./assets/images/app-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFF6EA"
     },
     "ios": {
       "supportsTablet": true

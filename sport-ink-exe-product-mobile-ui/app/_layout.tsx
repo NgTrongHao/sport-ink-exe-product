@@ -1,7 +1,7 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { NativeWindStyleSheet } from "nativewind";
 import { SplashScreen, Stack } from "expo-router";
+import * as Font from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -10,6 +10,23 @@ NativeWindStyleSheet.setOutput({
 });
 
 const RootLayout = () => {
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        // Prepare app
+        await Font.loadAsync({
+          'SpaceMono-Regular': require('../assets/fonts/SpaceMono-Regular.ttf'),
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    };
+
+    prepare();
+  }, []);
+
   return (
     <Stack>
       <Stack.Screen

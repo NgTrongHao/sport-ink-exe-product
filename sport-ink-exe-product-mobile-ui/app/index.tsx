@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { ChatBubbleOvalLeftIcon } from "react-native-heroicons/solid";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import DuckWaveAnimation from "@/components/DuckWaveAnimation";
+import DuckWaveAnimation from "@/components/animations/DuckWaveAnimation";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -13,11 +13,11 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center bg-amber-100">
+    <SafeAreaView className="flex-1 justify-center items-center bg-[#FEFAF7]">
       <Text className="text-3xl text-amber-600 font-bold">
         Welcome to SportInk
       </Text>
-      <Text className="text-sm">Sign in to leave your sprort's footprints</Text>
+      <Text className="text-sm">Sign in to leave your sport's footprint</Text>
       <DuckWaveAnimation />
       <View className="absolute bottom-10 items-center space-y-2">
         <TouchableOpacity
