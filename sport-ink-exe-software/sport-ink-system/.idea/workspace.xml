@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8b0ec8df-ebb0-48c4-b9dd-f3246beb93bf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/adapter/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/dsGateway/UserDsGateway.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/rest/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/application/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/application/src/main/java/rubberduck/org/sportinksystem/SportInkSystemApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/application/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/application/src/main/resources/templates/welcome-email.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/InputBoundary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/cache/CacheService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/cache/TokenCacheService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/hashing/PasswordHasher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/mail/MailSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/MessageEncryptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/QueueMessageHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/QueueProducer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/token/TokenProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/RegisterResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/UserInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/usecase/create/RegisterInteractor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/usecase/create/RegisterUsecase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/AbstractEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/message/EmailMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/AccessToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/BaseToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/EmailVerificationToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/RefreshToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/user/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/user/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/exception/MailSendingException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/exception/UserAlreadyExistsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Email.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/FullName.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Gender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Phone.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Username.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/cache/RedisCacheService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/cache/RedisTokenCacheService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/QueueConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/TemplateEngineConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/ApplicationAuthenticationEntryPoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/orm/RoleEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/orm/UserEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/persistence/UserEntityRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/encrypt/AesMessageEncryptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/hashing/BcryptPasswordHasher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/mail/EmailMessageHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/mail/QueueBasedMailSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/queue/RabbitMQConsumer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/queue/RabbitMQProducer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/token/JwtTokenProvider.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sport-ink-system" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sport-ink-system" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sport-ink-system" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="com.intellij.jpb.JpaRepository" />
+        <option value="Exception" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2r6aXyoOyYmEmmqFRDYPXSYwyCF" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build sport-ink-system.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sport-ink-system [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.SportInkSystemApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/RubberDuck/sport-ink-exe-software/sport-ink-system/system/infrastructure/src/main/resources/templates&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.grazie.pro.style&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\RubberDuck\sport-ink-exe-software\sport-ink-system\system\infrastructure\src\main\resources\templates" />
+      <recent name="D:\RubberDuck\sport-ink-exe-software\sport-ink-system\system\infrastructure\src\main\java\rubberduck\org\sportinksystem\infrastructure\config\security" />
+      <recent name="D:\RubberDuck\sport-ink-exe-software\sport-ink-system\system\core\domain\src\main\java\rubberduck\org\sportinksystem\core\domain\valueObject" />
+      <recent name="D:\RubberDuck\sport-ink-exe-software\sport-ink-system\system\core\domain\src\main\java\rubberduck\org\sportinksystem\core\domain\entity\user" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\RubberDuck\sport-ink-exe-software\sport-ink-system\system\application\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="rubberduck.org.sportinksystem.core.domain.entity" />
+      <recent name="rubberduck.org.sportinksystem" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="SportInkSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="sport-ink-system.system.application.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="rubberduck.org.sportinksystem.SportInkSystemApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8b0ec8df-ebb0-48c4-b9dd-f3246beb93bf" name="Changes" comment="" />
+      <created>1735882022851</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735882022851</updated>
+      <workItem from="1735882024767" duration="2859000" />
+      <workItem from="1735903872427" duration="15249000" />
+      <workItem from="1735998030290" duration="9256000" />
+      <workItem from="1736071805560" duration="6837000" />
+      <workItem from="1736091075571" duration="2315000" />
+      <workItem from="1736131350656" duration="4134000" />
+      <workItem from="1736156810135" duration="1164000" />
+      <workItem from="1736167485678" duration="669000" />
+      <workItem from="1736171034274" duration="1218000" />
+      <workItem from="1736215011783" duration="27869000" />
+      <workItem from="1736247457663" duration="29000" />
+      <workItem from="1736249474934" duration="6981000" />
+      <workItem from="1736256634224" duration="123000" />
+      <workItem from="1736265911891" duration="3528000" />
+      <workItem from="1736269512828" duration="14000" />
+      <workItem from="1736305120848" duration="5497000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

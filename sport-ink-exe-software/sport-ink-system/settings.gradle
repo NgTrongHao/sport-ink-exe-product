@@ -1,0 +1,8 @@
+rootProject.name = 'sport-ink-system'
+
+// application
+include 'system:application'
+include 'system:core:domain'
+include 'system:core:application-service'
+include 'system:infrastructure'
+include 'system:adapter'

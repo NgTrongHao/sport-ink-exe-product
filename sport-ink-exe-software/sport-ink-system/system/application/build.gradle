@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencies {
+    implementation project(':system:core:domain')
+    implementation project(':system:core:application-service')
+    implementation project(':system:infrastructure')
+    implementation project(':system:adapter')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

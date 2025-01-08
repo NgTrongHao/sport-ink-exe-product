@@ -1,0 +1,11 @@
+configure(allprojects - project(':system')) {
+    apply plugin: 'java'
+    sourceCompatibility = JavaVersion.VERSION_23
+    repositories {
+        mavenCentral()
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
