@@ -115,4 +115,29 @@ public class AuthenticationService implements IAuthenticationService {
                 .user(user)
                 .build();
     }
+
+
+    private boolean findByUsernameAndPassword(String username, String password) { return userRepository.findByUsernameandPassword(request.username, request.password);
+    }
+
+    @Override
+    public LoginUserResponse login(LoginUserRequest request) {
+        boolean isSuccess = false;
+        if (checkIfUserExists(request)) {
+            User savedUser = findByUsernameAndPassword(request.username, request.password);
+            if(savedUser) {
+                cacheAccessToken(savedUser, accessToken);
+                return buildLoginUserResponse(savedUser, accessToken);
+            }
+        }
+        return throw new IllegalArgumentException("Username or password incorrect");
+    }
+
+    private LoginUserResponse buildLoginUserResponse(User user, AccessToken accessToken) {
+        return RegisterUserResponse.builder()
+                .accessToken(accessToken)
+                .user(user)
+                .build();
+    }
+
 }

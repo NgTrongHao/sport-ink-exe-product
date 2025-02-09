@@ -5,4 +5,5 @@ import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserResponse;
 
 public interface IAuthenticationService {
     RegisterUserResponse register(RegisterUserRequest request);
+    LoginUserResponse login(LoginUserRequest reques);
 }

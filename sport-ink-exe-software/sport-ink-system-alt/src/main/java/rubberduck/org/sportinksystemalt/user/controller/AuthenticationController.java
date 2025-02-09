@@ -30,4 +30,9 @@ public class AuthenticationController {
                         .build()
         );
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<RegisterUserResponse>> login (@RequestBody @Valid RegisterUserRequest registerUserRequest){
+        return ResponseEntity.
+    }
 }
