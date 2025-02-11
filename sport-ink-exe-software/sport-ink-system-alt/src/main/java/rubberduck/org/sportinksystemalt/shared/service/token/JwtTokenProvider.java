@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.token;
+package rubberduck.org.sportinksystemalt.shared.service.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -9,6 +9,7 @@ import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
 import rubberduck.org.sportinksystemalt.shared.domain.EmailVerificationToken;
 import rubberduck.org.sportinksystemalt.shared.domain.RefreshToken;
 import rubberduck.org.sportinksystemalt.shared.domain.TokenType;
+import rubberduck.org.sportinksystemalt.shared.service.cache.TokenCacheService;
 
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +29,12 @@ public class JwtTokenProvider implements TokenProvider {
 
     @Value("${security.jwt.email-verification-token-expiration-in-ms}")
     private long emailVerificationTokenExpiration;
+
+    private final TokenCacheService tokenCacheService;
+
+    public JwtTokenProvider(TokenCacheService tokenCacheService) {
+        this.tokenCacheService = tokenCacheService;
+    }
 
     @Override
     public AccessToken generateAccessToken(Map<String, Object> claims, String subject) {
@@ -61,6 +68,7 @@ public class JwtTokenProvider implements TokenProvider {
                     .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parse(token);
+            checkAccessTokenInCache(extractUsername(token));
             return true;
         } catch (MalformedJwtException | IllegalArgumentException malformedJwtException) {
             throw new BadCredentialsException("Invalid token");
@@ -69,6 +77,22 @@ public class JwtTokenProvider implements TokenProvider {
         } catch (UnsupportedJwtException unsupportedJwtException) {
             throw new BadCredentialsException("Unsupported token");
         }
+    }
+
+    private void checkAccessTokenInCache(String keyValue) {
+        if (tokenCacheService.getAccessToken(keyValue) == null) {
+            throw new BadCredentialsException("Invalid access token");
+        }
+    }
+
+    @Override
+    public void invalidateAccessToken(String keyValue) {
+        tokenCacheService.removeAccessToken(keyValue);
+    }
+
+    @Override
+    public void cacheAccessToken(AccessToken accessToken) {
+        tokenCacheService.addAccessToken(accessToken.getUsername(), accessToken.getToken(), accessTokenExpiration);
     }
 
     @Override

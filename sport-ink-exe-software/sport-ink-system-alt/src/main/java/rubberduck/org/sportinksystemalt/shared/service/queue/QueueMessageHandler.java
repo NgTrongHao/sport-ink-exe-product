@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.queue;
+package rubberduck.org.sportinksystemalt.shared.service.queue;
 
 @FunctionalInterface
 public interface QueueMessageHandler<T> {

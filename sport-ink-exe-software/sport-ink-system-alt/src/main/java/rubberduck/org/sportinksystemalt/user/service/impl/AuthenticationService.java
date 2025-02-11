@@ -2,12 +2,11 @@ package rubberduck.org.sportinksystemalt.user.service.impl;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rubberduck.org.sportinksystemalt.shared.common.service.cache.TokenCacheService;
-import rubberduck.org.sportinksystemalt.shared.common.service.mail.MailSender;
-import rubberduck.org.sportinksystemalt.shared.common.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
+import rubberduck.org.sportinksystemalt.shared.service.mail.MailSender;
+import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserResponse;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.Role;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 import rubberduck.org.sportinksystemalt.user.repository.UserRepository;
@@ -22,18 +21,16 @@ public class AuthenticationService implements IAuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final MailSender mailSender;
     private final TokenProvider tokenProvider;
-    private final TokenCacheService tokenCacheService;
 
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, MailSender mailSender, TokenProvider tokenProvider, TokenCacheService tokenCacheService) {
+    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, MailSender mailSender, TokenProvider tokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailSender = mailSender;
         this.tokenProvider = tokenProvider;
-        this.tokenCacheService = tokenCacheService;
     }
 
     @Override
-    public RegisterUserResponse register(RegisterUserRequest request) {
+    public UserWithTokenResponse register(RegisterUserRequest request) {
         if (checkIfUserExists(request)) {
             throw new IllegalArgumentException("User with this email or username already exists");
         }
@@ -42,7 +39,7 @@ public class AuthenticationService implements IAuthenticationService {
         AccessToken accessToken = generateAccessToken(savedUser);
         sendWelcomeEmail(savedUser);
         sendEmailVerificationEmail(savedUser, accessToken.getToken());
-        cacheAccessToken(savedUser, accessToken);
+        tokenProvider.cacheAccessToken(accessToken);
 
         return buildRegisterUserResponse(savedUser, accessToken);
     }
@@ -101,16 +98,8 @@ public class AuthenticationService implements IAuthenticationService {
         ), token);
     }
 
-    private void cacheAccessToken(User user, AccessToken accessToken) {
-        tokenCacheService.addAccessToken(
-                user.getUsername(),
-                accessToken.getToken(),
-                tokenProvider.getAccessTokenExpiration()
-        );
-    }
-
-    private RegisterUserResponse buildRegisterUserResponse(User user, AccessToken accessToken) {
-        return RegisterUserResponse.builder()
+    private UserWithTokenResponse buildRegisterUserResponse(User user, AccessToken accessToken) {
+        return UserWithTokenResponse.builder()
                 .accessToken(accessToken)
                 .user(user)
                 .build();

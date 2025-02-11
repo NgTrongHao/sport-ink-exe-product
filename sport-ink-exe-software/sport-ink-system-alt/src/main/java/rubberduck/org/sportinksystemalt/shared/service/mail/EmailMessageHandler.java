@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.mail;
+package rubberduck.org.sportinksystemalt.shared.service.mail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
@@ -9,8 +9,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import rubberduck.org.sportinksystemalt.shared.common.service.queue.MessageEncryptor;
-import rubberduck.org.sportinksystemalt.shared.common.service.queue.QueueMessageHandler;
+import rubberduck.org.sportinksystemalt.shared.service.queue.MessageEncryptor;
+import rubberduck.org.sportinksystemalt.shared.service.queue.QueueMessageHandler;
 
 import java.io.UnsupportedEncodingException;
 
@@ -35,7 +35,7 @@ public class EmailMessageHandler implements QueueMessageHandler<String> {
     public void handle(String encryptedMessage) {
         try {
             String decryptedMessage = messageEncryptor.decrypt(encryptedMessage);
-            rubberduck.org.sportinksystemalt.shared.common.service.mail.EmailMessage emailMessage = objectMapper.readValue(decryptedMessage, EmailMessage.class);
+            EmailMessage emailMessage = objectMapper.readValue(decryptedMessage, EmailMessage.class);
             sendEmail(emailMessage);
         } catch (Exception e) {
             throw new MailSendingException("Failed to handle message", e);

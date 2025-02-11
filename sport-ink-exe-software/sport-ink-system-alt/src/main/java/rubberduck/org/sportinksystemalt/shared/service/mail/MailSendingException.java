@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.mail;
+package rubberduck.org.sportinksystemalt.shared.service.mail;
 
 public class MailSendingException extends RuntimeException {
     public MailSendingException(String message) {

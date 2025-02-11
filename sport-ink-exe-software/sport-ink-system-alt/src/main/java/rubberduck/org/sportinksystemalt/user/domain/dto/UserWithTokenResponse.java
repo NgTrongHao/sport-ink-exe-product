@@ -5,7 +5,7 @@ import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 
 @Builder
-public record RegisterUserResponse(
+public record UserWithTokenResponse(
         User user,
         AccessToken accessToken
 ) {

@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.queue;
+package rubberduck.org.sportinksystemalt.shared.service.queue;
 
 import jakarta.annotation.PreDestroy;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
