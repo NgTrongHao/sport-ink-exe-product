@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.queue;
+package rubberduck.org.sportinksystemalt.shared.service.queue;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;

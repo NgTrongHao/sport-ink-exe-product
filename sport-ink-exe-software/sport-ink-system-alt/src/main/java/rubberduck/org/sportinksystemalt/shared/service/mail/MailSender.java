@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.mail;
+package rubberduck.org.sportinksystemalt.shared.service.mail;
 
 public interface MailSender {
     void sendWelcomeEmail(String email, String name);

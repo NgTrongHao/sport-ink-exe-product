@@ -1,8 +1,8 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.cache.impl;
+package rubberduck.org.sportinksystemalt.shared.service.cache.impl;
 
 import org.springframework.stereotype.Service;
-import rubberduck.org.sportinksystemalt.shared.common.service.cache.CacheService;
-import rubberduck.org.sportinksystemalt.shared.common.service.cache.TokenCacheService;
+import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
+import rubberduck.org.sportinksystemalt.shared.service.cache.TokenCacheService;
 
 @Service
 public class RedisTokenCacheService implements TokenCacheService {

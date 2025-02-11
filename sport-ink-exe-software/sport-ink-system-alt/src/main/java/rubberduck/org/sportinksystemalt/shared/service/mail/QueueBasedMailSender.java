@@ -1,14 +1,14 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.mail;
+package rubberduck.org.sportinksystemalt.shared.service.mail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import rubberduck.org.sportinksystemalt.shared.common.service.queue.MessageEncryptor;
-import rubberduck.org.sportinksystemalt.shared.common.service.queue.QueueProducer;
+import rubberduck.org.sportinksystemalt.shared.service.queue.MessageEncryptor;
+import rubberduck.org.sportinksystemalt.shared.service.queue.QueueProducer;
 
 import java.util.Map;
 
 @Service
-public class QueueBasedMailSender implements rubberduck.org.sportinksystemalt.shared.common.service.mail.MailSender {
+public class QueueBasedMailSender implements MailSender {
     private final QueueProducer<String> queueProducer;
     private final ObjectMapper objectMapper;
     private final MessageEncryptor messageEncryptor;

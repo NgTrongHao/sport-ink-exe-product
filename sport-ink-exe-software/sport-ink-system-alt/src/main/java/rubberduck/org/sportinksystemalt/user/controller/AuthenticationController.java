@@ -1,6 +1,8 @@
 package rubberduck.org.sportinksystemalt.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserResponse;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.service.IAuthenticationService;
 
 @Controller
@@ -21,13 +23,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<RegisterUserResponse>> register(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
-        return ResponseEntity.ok(
-                ApiResponse.<RegisterUserResponse>builder()
-                        .code(200)
+    @Operation(
+            summary = "Register REST API",
+            description = "Register REST API is used to register a new user."
+    )
+    public ResponseEntity<ApiResponse<UserWithTokenResponse>> register(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
+        return new ResponseEntity<>(
+                ApiResponse.<UserWithTokenResponse>builder()
+                        .code(201)
                         .message("User registered successfully")
                         .data(authenticationService.register(registerUserRequest))
-                        .build()
-        );
+                        .build(),
+                HttpStatus.CREATED);
     }
 }

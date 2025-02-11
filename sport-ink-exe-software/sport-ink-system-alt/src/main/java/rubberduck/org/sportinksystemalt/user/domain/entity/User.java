@@ -1,5 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -57,6 +58,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+    @Column(name = "phone_number", length = 10, unique = true, columnDefinition = "VARCHAR(10) CHECK (phone_number ~ '^[0-9]+$')")
+    private String phoneNumber;
+
     @Column(nullable = false)
     private boolean enabled;
 
@@ -77,6 +81,14 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Player player;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private VenueOwner venueOwner;
 
     @PrePersist
     public void prePersist() {

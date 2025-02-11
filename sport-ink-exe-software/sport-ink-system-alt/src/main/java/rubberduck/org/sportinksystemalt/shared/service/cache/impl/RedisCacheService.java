@@ -1,19 +1,19 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.cache.impl;
+package rubberduck.org.sportinksystemalt.shared.service.cache.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import rubberduck.org.sportinksystemalt.shared.common.service.cache.CacheService;
+import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 
 import java.util.Objects;
 
 @Service
 public class RedisCacheService implements CacheService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    public RedisCacheService(RedisTemplate<String, Object> redisTemplate, ObjectMapper objectMapper) {
+    public RedisCacheService(RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
         this.objectMapper = objectMapper;
     }
@@ -27,10 +27,17 @@ public class RedisCacheService implements CacheService {
     @Override
     public void put(String key, Object value, long timeToLive) {
         try {
-            // Convert the object to a JSON string and store it in Redis
-            redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(value), timeToLive);
+            String dataToStore;
+
+            if (value instanceof String) {
+                dataToStore = (String) value;
+            } else {
+                dataToStore = objectMapper.writeValueAsString(value);
+            }
+
+            redisTemplate.opsForValue().set(key, dataToStore, timeToLive);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error storing key in Redis: " + key, e);
         }
     }
 
@@ -42,11 +49,16 @@ public class RedisCacheService implements CacheService {
      */
     @Override
     public Object get(String key) {
+//        try {
+//            // Retrieve the object from Redis and convert it back to its original form
+//            return objectMapper.readValue((String) redisTemplate.opsForValue().get(key), Object.class);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
         try {
-            // Retrieve the object from Redis and convert it back to its original form
-            return objectMapper.readValue((String) redisTemplate.opsForValue().get(key), Object.class);
+            return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error retrieving key from Redis: " + key, e);
         }
     }
 

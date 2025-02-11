@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.token;
+package rubberduck.org.sportinksystemalt.shared.service.token;
 
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
 import rubberduck.org.sportinksystemalt.shared.domain.EmailVerificationToken;
@@ -15,6 +15,10 @@ public interface TokenProvider {
     EmailVerificationToken generateEmailVerificationToken(Map<String, Object> claims, String subject);
 
     boolean validateToken(String token);
+
+    void invalidateAccessToken(String token);
+
+    void cacheAccessToken(AccessToken accessToken);
 
     String extractUsername(String token);
 

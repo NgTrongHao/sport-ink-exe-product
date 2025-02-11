@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.shared.common.service.mail;
+package rubberduck.org.sportinksystemalt.shared.service.mail;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
