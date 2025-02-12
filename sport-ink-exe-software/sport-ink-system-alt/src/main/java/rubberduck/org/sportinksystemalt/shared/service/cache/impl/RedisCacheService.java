@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RedisCacheService implements CacheService {
@@ -34,8 +35,8 @@ public class RedisCacheService implements CacheService {
             } else {
                 dataToStore = objectMapper.writeValueAsString(value);
             }
-
-            redisTemplate.opsForValue().set(key, dataToStore, timeToLive);
+            System.out.println("dataToStore: " + " + key " + key + " + dataToStore " + dataToStore + " + timeToLive " + timeToLive);
+            redisTemplate.opsForValue().set(key, dataToStore, timeToLive, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             throw new RuntimeException("Error storing key in Redis: " + key, e);
         }
@@ -56,6 +57,7 @@ public class RedisCacheService implements CacheService {
 //            throw new RuntimeException(e);
 //        }
         try {
+            System.out.println("Data from Redis: " + redisTemplate.opsForValue().get(key));
             return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving key from Redis: " + key, e);

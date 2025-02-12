@@ -6,4 +6,5 @@ import rubberduck.org.sportinksystemalt.user.domain.entity.VenueOwner;
 import java.util.UUID;
 
 public interface VenueOwnerRepository extends JpaRepository<VenueOwner, UUID> {
+    VenueOwner findByUser_Username(String userUsername);
 }

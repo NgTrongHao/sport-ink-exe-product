@@ -9,7 +9,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "players", uniqueConstraints = {
+@Table(name = "player", uniqueConstraints = {
         @UniqueConstraint(columnNames = "user_id")
 }, indexes = {
         @Index(columnList = "user_id")

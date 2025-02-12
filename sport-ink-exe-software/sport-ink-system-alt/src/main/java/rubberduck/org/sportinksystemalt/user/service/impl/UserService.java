@@ -1,6 +1,7 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
 import rubberduck.org.sportinksystemalt.shared.exception.handler.ResourceNotFoundException;
 import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
@@ -26,6 +27,8 @@ public class UserService implements IUserService {
     private final TokenProvider tokenProvider;
     private final CacheService cacheService;
 
+    private static final Long USER_CACHE_EXPIRATION = 900000L;
+
     public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService) {
         this.userRepository = userRepository;
         this.playerRepository = playerRepository;
@@ -35,6 +38,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserWithTokenResponse createPlayerProfile(String username, CreatePlayerProfileRequest request) {
         User user = findUserByUsername(username);
         validateRegistrationUserState(user);
@@ -45,6 +49,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserWithTokenResponse createVenueOwnerProfile(String username, CreateVenueOwnerProfileRequest request) {
         User user = findUserByUsername(username);
         validateRegistrationUserState(user);
@@ -125,6 +130,6 @@ public class UserService implements IUserService {
     }
 
     private void cacheUser(User user) {
-        cacheService.put(user.getUsername(), user, 3600);
+        cacheService.put(user.getUsername(), user, USER_CACHE_EXPIRATION);
     }
 }

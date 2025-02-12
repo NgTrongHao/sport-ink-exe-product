@@ -53,6 +53,9 @@ dependencies {
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
 
+    // https://mvnrepository.com/artifact/ch.hsr/geohash
+    implementation group: 'ch.hsr', name: 'geohash', version: '1.4.0'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
