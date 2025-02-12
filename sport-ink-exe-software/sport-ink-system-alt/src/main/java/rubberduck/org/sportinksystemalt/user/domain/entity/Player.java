@@ -1,21 +1,23 @@
 package rubberduck.org.sportinksystemalt.user.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "players", uniqueConstraints = {
+@Table(name = "player", uniqueConstraints = {
         @UniqueConstraint(columnNames = "user_id")
 }, indexes = {
         @Index(columnList = "user_id")
 })
 @Getter
 @Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player {
@@ -25,10 +27,11 @@ public class Player {
     @MapsId
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
-    @Column(name = "phone_number", unique = true, nullable = false, length = 10, columnDefinition = "CHAR(10) CHECK (phone_number ~ '^[0-9]{10}$')")
-    private String phoneNumber;
+    @Column(nullable = false)
+    private Gender gender;
 
     @Column(name = "preferred_sport")
     private String preferredSport;
