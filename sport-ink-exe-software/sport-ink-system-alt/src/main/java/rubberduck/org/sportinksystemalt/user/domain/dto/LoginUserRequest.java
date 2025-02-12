@@ -14,7 +14,7 @@ public record LoginUserRequest(
         String username,
 
         @NotBlank(message = "Password is required")
-        String password,
+        String password
 
 
 ) {

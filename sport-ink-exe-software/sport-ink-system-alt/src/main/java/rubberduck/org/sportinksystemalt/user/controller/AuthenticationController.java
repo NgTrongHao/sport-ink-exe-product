@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserResponse;
 import rubberduck.org.sportinksystemalt.user.service.IAuthenticationService;
@@ -32,7 +34,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<RegisterUserResponse>> login (@RequestBody @Valid RegisterUserRequest registerUserRequest){
-        return ResponseEntity.
+    public ResponseEntity<ApiResponse<LoginUserResponse>> login (@RequestBody @Valid LoginUserRequest loginUserRequest){
+        return ResponseEntity.ok(
+                ApiResponse.<LoginUserResponse>builder()
+                        .code(200)
+                        .message("User login successfully")
+                        .data(authenticationService.login(loginUserRequest))
+                        .build()
+        );
     }
 }

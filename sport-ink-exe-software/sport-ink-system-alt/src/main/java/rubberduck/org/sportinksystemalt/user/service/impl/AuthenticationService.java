@@ -6,6 +6,8 @@ import rubberduck.org.sportinksystemalt.shared.common.service.cache.TokenCacheSe
 import rubberduck.org.sportinksystemalt.shared.common.service.mail.MailSender;
 import rubberduck.org.sportinksystemalt.shared.common.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.Role;
@@ -117,24 +119,23 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
 
-    private boolean findByUsernameAndPassword(String username, String password) { return userRepository.findByUsernameandPassword(request.username, request.password);
-    }
-
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
-        boolean isSuccess = false;
-        if (checkIfUserExists(request)) {
-            User savedUser = findByUsernameAndPassword(request.username, request.password);
-            if(savedUser) {
-                cacheAccessToken(savedUser, accessToken);
-                return buildLoginUserResponse(savedUser, accessToken);
-            }
+        User user = userRepository.findByUsername(request.username());
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new IllegalArgumentException("Invalid username or password");
         }
-        return throw new IllegalArgumentException("Username or password incorrect");
+
+        AccessToken accessToken = generateAccessToken(user);
+
+        cacheAccessToken(user, accessToken);
+
+        return buildLoginUserResponse(user, accessToken);
     }
 
     private LoginUserResponse buildLoginUserResponse(User user, AccessToken accessToken) {
-        return RegisterUserResponse.builder()
+        return LoginUserResponse.builder()
                 .accessToken(accessToken)
                 .user(user)
                 .build();
