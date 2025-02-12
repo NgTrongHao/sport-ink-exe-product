@@ -68,7 +68,7 @@ public class JwtTokenProvider implements TokenProvider {
                     .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parse(token);
-            checkAccessTokenInCache(extractUsername(token));
+            checkAccessTokenInCache(extractUsername(token), token);
             return true;
         } catch (MalformedJwtException | IllegalArgumentException malformedJwtException) {
             throw new BadCredentialsException("Invalid token");
@@ -79,10 +79,11 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
-    private void checkAccessTokenInCache(String keyValue) {
+    private void checkAccessTokenInCache(String keyValue, String token) {
         if (tokenCacheService.getAccessToken(keyValue) == null) {
             throw new BadCredentialsException("Invalid access token");
         }
+        System.out.println("Token in cache: " + tokenCacheService.getAccessToken(keyValue));
     }
 
     @Override
@@ -102,7 +103,7 @@ public class JwtTokenProvider implements TokenProvider {
 
     @Override
     public List<String> getAuthoritiesFromToken(String token) {
-        List<?> rawList = extractAllClaims(token).get("scopes", List.class);
+        List<?> rawList = extractAllClaims(token).get("roles", List.class);
         return rawList != null ? rawList.stream()
                 .map(Object::toString)
                 .toList() : Collections.emptyList();
