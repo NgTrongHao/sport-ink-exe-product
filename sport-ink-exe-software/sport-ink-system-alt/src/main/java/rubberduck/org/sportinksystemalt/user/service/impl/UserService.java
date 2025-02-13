@@ -1,5 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
@@ -19,6 +20,7 @@ import rubberduck.org.sportinksystemalt.user.service.IUserService;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Service
 public class UserService implements IUserService {
@@ -28,6 +30,7 @@ public class UserService implements IUserService {
     private final TokenProvider tokenProvider;
     private final CacheService cacheService;
 
+    private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
     private static final Long USER_CACHE_EXPIRATION = 900000L;
 
     public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService) {
@@ -42,40 +45,60 @@ public class UserService implements IUserService {
     @Transactional
     public UserWithTokenResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
         User user = findUserByUsername(username);
-        if (request.getEmail() != null) {
-            user.setEmail(request.getEmail());
-        }
-        if (request.getFirstName() != null) {
-            user.setFirstName(request.getFirstName());
-        }
-        if (request.getMiddleName() != null) {
-            user.setMiddleName(request.getMiddleName());
-        }
-        if (request.getLastName() != null) {
-            user.setLastName(request.getLastName());
-        }
-        if (request.getPassword() != null) {
-            user.setPassword(request.getPassword()); // Ensure password is hashed before setting
-        }
-        if (request.getPhoneNumber() != null) {
-            user.setPhoneNumber(request.getPhoneNumber());
-        }
-        if (request.getProfilePicture() != null) {
-            user.setProfilePicture(request.getProfilePicture());
-        }
-        if (request.getCoverPicture() != null) {
-            user.setCoverPicture(request.getCoverPicture());
-        }
-        if (request.getBio() != null) {
-            user.setBio(request.getBio());
-        }
+        updateUserFields(user, request);
         userRepository.save(user);
-
-        // Cache the updated user
         cacheUser(user);
-
-        // Return the updated user with a new token
         return createUserWithTokenResponse(user);
+    }
+
+    private void updateUserFields(User user, UpdateUserProfileRequest request) {
+        updateIfNotNull(user::setEmail, request.getEmail(), this::validateEmail);
+        updateIfNotNull(user::setFirstName, request.getFirstName());
+        updateIfNotNull(user::setMiddleName, request.getMiddleName());
+        updateIfNotNull(user::setLastName, request.getLastName());
+        updateIfNotNull(user::setPassword, hashPassword(request.getPassword()));
+        updateIfNotNull(user::setPhoneNumber, request.getPhoneNumber(), this::validatePhoneNumber);
+        updateIfNotNull(user::setProfilePicture, request.getProfilePicture());
+        updateIfNotNull(user::setCoverPicture, request.getCoverPicture());
+        updateIfNotNull(user::setBio, request.getBio());
+    }
+
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value, Consumer<T> validator) {
+        if (value != null) {
+            validator.accept(value);
+            setter.accept(value);
+        }
+    }
+
+    private void validateEmail(String email) {
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && email.matches("[^@]+@[^@]+\\.[^@]+");
+    }
+
+    private void validatePhoneNumber(String phoneNumber) {
+        if (!isValidPhoneNumber(phoneNumber)) {
+            throw new IllegalArgumentException("Invalid phone number format");
+        }
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("\\d{10}");
+    }
+
+    private String hashPassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
     @Override
