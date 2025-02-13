@@ -8,6 +8,7 @@ import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreatePlayerProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreateVenueOwnerProfileRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UpdateUserProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.*;
 import rubberduck.org.sportinksystemalt.user.repository.PlayerRepository;
@@ -39,6 +40,46 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
+    public UserWithTokenResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
+        User user = findUserByUsername(username);
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getFirstName() != null) {
+            user.setFirstName(request.getFirstName());
+        }
+        if (request.getMiddleName() != null) {
+            user.setMiddleName(request.getMiddleName());
+        }
+        if (request.getLastName() != null) {
+            user.setLastName(request.getLastName());
+        }
+        if (request.getPassword() != null) {
+            user.setPassword(request.getPassword()); // Ensure password is hashed before setting
+        }
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getProfilePicture() != null) {
+            user.setProfilePicture(request.getProfilePicture());
+        }
+        if (request.getCoverPicture() != null) {
+            user.setCoverPicture(request.getCoverPicture());
+        }
+        if (request.getBio() != null) {
+            user.setBio(request.getBio());
+        }
+        userRepository.save(user);
+
+        // Cache the updated user
+        cacheUser(user);
+
+        // Return the updated user with a new token
+        return createUserWithTokenResponse(user);
+    }
+
+    @Override
+    @Transactional
     public UserWithTokenResponse createPlayerProfile(String username, CreatePlayerProfileRequest request) {
         User user = findUserByUsername(username);
         validateRegistrationUserState(user);
@@ -58,6 +99,8 @@ public class UserService implements IUserService {
 
         return createUserWithTokenResponse(user);
     }
+
+
 
     private User findUserByUsername(String username) {
         return userRepository.findByUsername(username)

@@ -9,6 +9,7 @@ import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreatePlayerProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreateVenueOwnerProfileRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UpdateUserProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
@@ -42,4 +43,20 @@ public class UserController {
                         .build()
         );
     }
+
+
+    @PostMapping("/updateUserProfile")
+    public ResponseEntity<ApiResponse<UserWithTokenResponse>> updateUserProfile(
+            @CurrentUser String username,
+            @RequestBody UpdateUserProfileRequest request){
+        return ResponseEntity.ok(
+                ApiResponse.<UserWithTokenResponse>builder()
+                        .code(200)
+                        .message("User profile updated successfully")
+                        .data(userService.updateUserProfile(username, request))
+                        .build()
+        );
+    }
+
+
 }
