@@ -3,6 +3,9 @@ package rubberduck.org.sportinksystemalt.user.service.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
+
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserResponse;
 import rubberduck.org.sportinksystemalt.shared.service.mail.MailSender;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
@@ -104,4 +107,28 @@ public class AuthenticationService implements IAuthenticationService {
                 .user(user)
                 .build();
     }
+
+
+    @Override
+    public LoginUserResponse login(LoginUserRequest request) {
+        User user = userRepository.findByUsername(request.username());
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+
+        AccessToken accessToken = generateAccessToken(user);
+
+        cacheAccessToken(user, accessToken);
+
+        return buildLoginUserResponse(user, accessToken);
+    }
+
+    private LoginUserResponse buildLoginUserResponse(User user, AccessToken accessToken) {
+        return LoginUserResponse.builder()
+                .accessToken(accessToken)
+                .user(user)
+                .build();
+    }
+
 }
