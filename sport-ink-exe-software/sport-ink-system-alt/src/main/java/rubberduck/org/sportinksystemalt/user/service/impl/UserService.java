@@ -1,5 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
@@ -8,6 +9,7 @@ import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreatePlayerProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.CreateVenueOwnerProfileRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UpdateUserProfileRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.*;
 import rubberduck.org.sportinksystemalt.user.repository.PlayerRepository;
@@ -18,6 +20,7 @@ import rubberduck.org.sportinksystemalt.user.service.IUserService;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Service
 public class UserService implements IUserService {
@@ -27,6 +30,7 @@ public class UserService implements IUserService {
     private final TokenProvider tokenProvider;
     private final CacheService cacheService;
 
+    private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
     private static final Long USER_CACHE_EXPIRATION = 900000L;
 
     public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService) {
@@ -35,6 +39,66 @@ public class UserService implements IUserService {
         this.venueOwnerRepository = venueOwnerRepository;
         this.tokenProvider = tokenProvider;
         this.cacheService = cacheService;
+    }
+
+    @Override
+    @Transactional
+    public UserWithTokenResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
+        User user = findUserByUsername(username);
+        updateUserFields(user, request);
+        userRepository.save(user);
+        cacheUser(user);
+        return createUserWithTokenResponse(user);
+    }
+
+    private void updateUserFields(User user, UpdateUserProfileRequest request) {
+        updateIfNotNull(user::setEmail, request.getEmail(), this::validateEmail);
+        updateIfNotNull(user::setFirstName, request.getFirstName());
+        updateIfNotNull(user::setMiddleName, request.getMiddleName());
+        updateIfNotNull(user::setLastName, request.getLastName());
+        updateIfNotNull(user::setPassword, hashPassword(request.getPassword()));
+        updateIfNotNull(user::setPhoneNumber, request.getPhoneNumber(), this::validatePhoneNumber);
+        updateIfNotNull(user::setProfilePicture, request.getProfilePicture());
+        updateIfNotNull(user::setCoverPicture, request.getCoverPicture());
+        updateIfNotNull(user::setBio, request.getBio());
+    }
+
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value, Consumer<T> validator) {
+        if (value != null) {
+            validator.accept(value);
+            setter.accept(value);
+        }
+    }
+
+    private void validateEmail(String email) {
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && email.matches("[^@]+@[^@]+\\.[^@]+");
+    }
+
+    private void validatePhoneNumber(String phoneNumber) {
+        if (!isValidPhoneNumber(phoneNumber)) {
+            throw new IllegalArgumentException("Invalid phone number format");
+        }
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("\\d{10}");
+    }
+
+    private String hashPassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
     @Override
@@ -58,6 +122,8 @@ public class UserService implements IUserService {
 
         return createUserWithTokenResponse(user);
     }
+
+
 
     private User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
