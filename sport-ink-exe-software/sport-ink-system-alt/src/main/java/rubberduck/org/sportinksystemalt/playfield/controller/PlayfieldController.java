@@ -1,0 +1,54 @@
+package rubberduck.org.sportinksystemalt.playfield.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import rubberduck.org.sportinksystemalt.playfield.domain.dto.CreatePlayfieldRequest;
+import rubberduck.org.sportinksystemalt.playfield.domain.dto.PlayfieldResponse;
+import rubberduck.org.sportinksystemalt.playfield.service.IPlayfieldService;
+import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/playfield")
+@Tag(name = "Playfield", description = "Playfield REST API")
+public class PlayfieldController {
+    private final IPlayfieldService playfieldService;
+
+    public PlayfieldController(IPlayfieldService playfieldService) {
+        this.playfieldService = playfieldService;
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('VENUE_OWNER')")
+    @Operation(
+            summary = "Add Playfield REST API",
+            description = "Add Playfield REST API is used to add a new playfield to the venue location."
+    )
+    public ResponseEntity<ApiResponse<String>> addPlayfield(@RequestBody CreatePlayfieldRequest request) {
+        playfieldService.addPlayfield(request);
+        return new ResponseEntity<>(ApiResponse.<String>builder()
+                .code(201)
+                .message("Playfield added successfully")
+                .build(),
+                HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("/getPlayfields/{venueLocationId}")
+    @Operation(
+            summary = "Get Playfields By Venue Location ID REST API",
+            description = "Get Playfields By Venue Location ID REST API is used to fetch all playfields by venue location ID."
+    )
+    public ResponseEntity<ApiResponse<Iterable<PlayfieldResponse>>> getPlayfieldsByVenueLocationId(@PathVariable UUID venueLocationId) {
+        return ResponseEntity.ok(ApiResponse.<Iterable<PlayfieldResponse>>builder()
+                .code(200)
+                .message("Play fields fetched successfully")
+                .data(playfieldService.getPlayfieldsByVenueLocationId(venueLocationId))
+                .build());
+    }
+}

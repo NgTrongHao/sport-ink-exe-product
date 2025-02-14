@@ -1,6 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
@@ -20,6 +20,7 @@ import rubberduck.org.sportinksystemalt.user.service.IUserService;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Service
@@ -29,16 +30,17 @@ public class UserService implements IUserService {
     private final VenueOwnerRepository venueOwnerRepository;
     private final TokenProvider tokenProvider;
     private final CacheService cacheService;
+    private final PasswordEncoder passwordEncoder;
 
-    private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
     private static final Long USER_CACHE_EXPIRATION = 900000L;
 
-    public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService) {
+    public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.playerRepository = playerRepository;
         this.venueOwnerRepository = venueOwnerRepository;
         this.tokenProvider = tokenProvider;
         this.cacheService = cacheService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,7 +64,6 @@ public class UserService implements IUserService {
         updateIfNotNull(user::setCoverPicture, request.getCoverPicture());
         updateIfNotNull(user::setBio, request.getBio());
     }
-
 
     private <T> void updateIfNotNull(Consumer<T> setter, T value) {
         if (value != null) {
@@ -123,7 +124,10 @@ public class UserService implements IUserService {
         return createUserWithTokenResponse(user);
     }
 
-
+    @Override
+    public VenueOwner getVenueOwnerById(UUID id) {
+        return venueOwnerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Venue owner not found"));
+    }
 
     private User findUserByUsername(String username) {
         return userRepository.findByUsername(username)

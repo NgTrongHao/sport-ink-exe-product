@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import rubberduck.org.sportinksystemalt.administration.domain.entity.Sport;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class PlayfieldSport {
     @ToString.Exclude
     private Sport sport;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean enabled;
 
     private String description;

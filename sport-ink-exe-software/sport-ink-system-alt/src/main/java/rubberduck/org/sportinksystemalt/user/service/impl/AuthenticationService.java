@@ -111,7 +111,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
-        User user = userRepository.findByUsername(request.username());
+        User user = userRepository.findByUsername(request.username()).orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid username or password");
@@ -119,7 +119,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         AccessToken accessToken = generateAccessToken(user);
 
-        cacheAccessToken(user, accessToken);
+        tokenProvider.cacheAccessToken(accessToken);
 
         return buildLoginUserResponse(user, accessToken);
     }

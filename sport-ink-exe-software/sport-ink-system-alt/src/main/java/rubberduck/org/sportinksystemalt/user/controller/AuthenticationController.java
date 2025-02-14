@@ -1,6 +1,7 @@
 package rubberduck.org.sportinksystemalt.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import rubberduck.org.sportinksystemalt.user.service.IAuthenticationService;
 
 @Controller
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Authentication REST API")
 public class AuthenticationController {
     private final IAuthenticationService authenticationService;
 
@@ -40,7 +42,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginUserResponse>> login (@RequestBody @Valid LoginUserRequest loginUserRequest){
+    @Operation(
+            summary = "Login REST API",
+            description = "Login REST API is used to login a user."
+    )
+    public ResponseEntity<ApiResponse<LoginUserResponse>> login(@RequestBody @Valid LoginUserRequest loginUserRequest) {
         return ResponseEntity.ok(
                 ApiResponse.<LoginUserResponse>builder()
                         .code(200)

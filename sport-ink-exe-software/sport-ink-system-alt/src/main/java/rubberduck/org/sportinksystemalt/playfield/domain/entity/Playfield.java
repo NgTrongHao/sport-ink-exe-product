@@ -32,6 +32,7 @@ public class Playfield {
     @CollectionTable(name = "playfield_image_urls", joinColumns = @JoinColumn(name = "playfield_id"))
     private List<String> imageUrls;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean enabled;
 
     @ManyToOne

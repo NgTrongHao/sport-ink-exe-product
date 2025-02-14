@@ -9,6 +9,7 @@ import rubberduck.org.sportinksystemalt.shared.common.util.GeohashUtil;
 import rubberduck.org.sportinksystemalt.user.repository.VenueOwnerRepository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +36,17 @@ public class VenueLocationService implements IVenueLocationService {
                 .venueOwner(venueOwnerRepository.findByUser_Username(username))
                 .build();
         venueLocationRepository.save(venueLocation);
+    }
+
+    @Override
+    public VenueLocation getVenueLocationById(UUID id) {
+        return venueLocationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Venue location not found"));
+    }
+
+    @Override
+    public boolean isOwnerOfVenueLocation(UUID venueId, UUID ownerId) {
+        VenueLocation venueLocation = getVenueLocationById(venueId);
+        return venueLocation.getVenueOwner().getUserId().equals(ownerId);
     }
 
     public List<VenueLocation> findNearbyVenues(double latitude, double longitude, double radius) {

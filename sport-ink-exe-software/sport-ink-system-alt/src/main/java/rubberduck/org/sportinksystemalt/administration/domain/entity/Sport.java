@@ -1,4 +1,4 @@
-package rubberduck.org.sportinksystemalt.playfield.domain.entity;
+package rubberduck.org.sportinksystemalt.administration.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

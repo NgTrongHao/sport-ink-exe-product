@@ -83,7 +83,9 @@ public class JwtTokenProvider implements TokenProvider {
         if (tokenCacheService.getAccessToken(keyValue) == null) {
             throw new BadCredentialsException("Invalid access token");
         }
-        System.out.println("Token in cache: " + tokenCacheService.getAccessToken(keyValue));
+        if (!tokenCacheService.getAccessToken(keyValue).equals(token)) {
+            throw new BadCredentialsException("Invalid access token");
+        }
     }
 
     @Override
