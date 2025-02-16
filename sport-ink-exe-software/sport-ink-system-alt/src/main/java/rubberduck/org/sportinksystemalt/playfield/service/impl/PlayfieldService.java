@@ -7,15 +7,18 @@ import rubberduck.org.sportinksystemalt.administration.service.ISportService;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.CreatePlayfieldRequest;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.PlayfieldResponse;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.PlayfieldSportResponse;
+import rubberduck.org.sportinksystemalt.playfield.domain.dto.UpdatePricingBySportRequest;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
+import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldPricing;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
 import rubberduck.org.sportinksystemalt.playfield.repository.PlayfieldRepository;
 import rubberduck.org.sportinksystemalt.playfield.service.IPlayfieldService;
 import rubberduck.org.sportinksystemalt.playfield.service.IVenueLocationService;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
-import java.util.List;
-import java.util.UUID;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +57,44 @@ public class PlayfieldService implements IPlayfieldService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void approvePlayfield(UUID playfieldId) {
+        Playfield playfield = playfieldRepository.findById(playfieldId)
+                .orElseThrow(() -> new IllegalArgumentException("Playfield not found"));
+
+        playfield.setEnabled(true);
+        playfieldRepository.save(playfield);
+    }
+
+    @Override
+    public void updatePlayfieldPrice(UpdatePricingBySportRequest request) {
+        Playfield playfield = playfieldRepository.findById(request.playfieldId())
+                .orElseThrow(() -> new IllegalArgumentException("Playfield not found"));
+
+        PlayfieldSport playfieldSport = playfield.getPlayfieldSportList().stream()
+                .filter(ps -> ps.getSport().getId().equals(request.sportId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Sport not found"));
+
+        validatePricingRules(request.pricingRules());
+
+        playfieldSport.getPricingRules().clear();
+
+        List<PlayfieldPricing> newPricingRules = request.pricingRules().stream()
+                .map(rule -> PlayfieldPricing.builder()
+                        .playfieldSport(playfieldSport)
+                        .startTime(rule.startTime())
+                        .endTime(rule.endTime())
+                        .pricePerHour(rule.pricePerHour())
+                        .pricePerHalfHour(rule.pricePerHalfHour())
+                        .currency(rule.currency())
+                        .build()).toList();
+
+        playfieldSport.getPricingRules().addAll(newPricingRules);
+
+        playfieldRepository.save(playfield);
+    }
+
     private void validateVenueOwnership(UUID venueId, UUID venueOwnerId) {
         if (!venueLocationService.isOwnerOfVenueLocation(venueId, venueOwnerId)) {
             throw new IllegalArgumentException("Venue owner is not the owner of the venue location");
@@ -68,10 +109,37 @@ public class PlayfieldService implements IPlayfieldService {
                 .collect(Collectors.toList());
     }
 
+    private void validatePricingRules(List<UpdatePricingBySportRequest.PricingRule> rules) {
+        Map<DayOfWeek, List<Map.Entry<LocalTime, LocalTime>>> dayIntervals = new HashMap<>();
+
+        // Validate time intervals
+        for (var rule : rules) {
+            // Check if start time is before end time
+            if (rule.startTime().isAfter(rule.endTime())) {
+                throw new IllegalArgumentException("Start time must be before end time");
+            }
+            dayIntervals.computeIfAbsent(rule.dayOfWeek(), k -> new ArrayList<>())
+                    .add(Map.entry(rule.startTime(), rule.endTime()));
+        }
+
+        // Check for overlapping time intervals
+        for (var entry : dayIntervals.entrySet()) {
+            List<Map.Entry<LocalTime, LocalTime>> intervals = entry.getValue().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .toList();
+
+            for (int i = 1; i < intervals.size(); i++) {
+                if (!intervals.get(i).getKey().isAfter(intervals.get(i - 1).getValue())) {
+                    throw new IllegalArgumentException("Time intervals cannot overlap for " + entry.getKey());
+                }
+            }
+        }
+    }
+
     private Playfield buildPlayfield(CreatePlayfieldRequest request, List<PlayfieldSport> playfieldSportList) {
         return Playfield.builder()
                 .name(request.name())
-                .venueLocation(venueLocationService.getVenueLocationById(request.venueId()))
+                .venueLocation(venueLocationService.findVenueLocationById(request.venueId()))
                 .venueOwner(userService.getVenueOwnerById(request.venueOwnerId()))
                 .playfieldSportList(playfieldSportList)
                 .build();

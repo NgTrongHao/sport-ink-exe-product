@@ -10,4 +10,6 @@ public interface IAuthenticationService {
     UserWithTokenResponse register(RegisterUserRequest request);
 
     LoginUserResponse login(LoginUserRequest request);
+
+    UserWithTokenResponse loginWithGoogle(String token);
 }

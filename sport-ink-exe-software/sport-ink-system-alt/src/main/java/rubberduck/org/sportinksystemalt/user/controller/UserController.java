@@ -3,20 +3,14 @@ package rubberduck.org.sportinksystemalt.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
-import rubberduck.org.sportinksystemalt.user.domain.dto.CreatePlayerProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.CreateVenueOwnerProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.UpdateUserProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
+import rubberduck.org.sportinksystemalt.user.domain.dto.*;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @Tag(name = "User", description = "User REST API")
 public class UserController {
     private final IUserService userService;
@@ -25,7 +19,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/createPlayerProfile")
+    @GetMapping("/me")
+    @Operation(
+            summary = "Get User Profile REST API",
+            description = "Get User Profile REST API is used to fetch the user profile."
+    )
+    public ResponseEntity<ApiResponse<UserProfileResponse>> getUserProfile(@CurrentUser String username) {
+        return ResponseEntity.ok(
+                ApiResponse.<UserProfileResponse>builder()
+                        .code(200)
+                        .message("User profile fetched successfully")
+                        .data(userService.getUserProfile(username))
+                        .build()
+        );
+    }
+
+    @PostMapping("/create-player-profile")
     @Operation(
             summary = "Create Player Profile REST API",
             description = "Create Player Profile REST API is used to create a player profile."
@@ -40,7 +49,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/createVenueOwnerProfile")
+    @PostMapping("/create-venue-owner-profile")
     @Operation(
             summary = "Create Venue Owner Profile REST API",
             description = "Create Venue Owner Profile REST API is used to create a venue owner profile."
@@ -55,16 +64,16 @@ public class UserController {
         );
     }
 
-    @PostMapping("/updateUserProfile")
+    @PatchMapping("/update-user-profile")
     @Operation(
             summary = "Update User Profile REST API",
             description = "Update User Profile REST API is used to update a user profile."
     )
-    public ResponseEntity<ApiResponse<UserWithTokenResponse>> updateUserProfile(
+    public ResponseEntity<ApiResponse<UserProfileResponse>> updateUserProfile(
             @CurrentUser String username,
-            @RequestBody UpdateUserProfileRequest request){
+            @RequestBody UpdateUserProfileRequest request) {
         return ResponseEntity.ok(
-                ApiResponse.<UserWithTokenResponse>builder()
+                ApiResponse.<UserProfileResponse>builder()
                         .code(200)
                         .message("User profile updated successfully")
                         .data(userService.updateUserProfile(username, request))

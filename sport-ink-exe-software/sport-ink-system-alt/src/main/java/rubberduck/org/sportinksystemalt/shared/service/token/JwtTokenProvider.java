@@ -18,19 +18,15 @@ import java.util.Map;
 
 @Component
 public class JwtTokenProvider implements TokenProvider {
+    private final TokenCacheService tokenCacheService;
     @Value("${security.jwt.secret-key}")
     private String secretKey;
-
     @Value("${security.jwt.access-token-expiration-in-ms}")
     private long accessTokenExpiration;
-
     @Value("${security.jwt.refresh-token-expiration-in-ms}")
     private long refreshTokenExpiration;
-
     @Value("${security.jwt.email-verification-token-expiration-in-ms}")
     private long emailVerificationTokenExpiration;
-
-    private final TokenCacheService tokenCacheService;
 
     public JwtTokenProvider(TokenCacheService tokenCacheService) {
         this.tokenCacheService = tokenCacheService;

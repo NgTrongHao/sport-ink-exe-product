@@ -35,7 +35,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -54,6 +53,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/ch.hsr/geohash
     implementation group: 'ch.hsr', name: 'geohash', version: '1.4.0'
+
+    // Firebase Admin SDK https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+    implementation 'com.google.firebase:firebase-admin:9.3.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

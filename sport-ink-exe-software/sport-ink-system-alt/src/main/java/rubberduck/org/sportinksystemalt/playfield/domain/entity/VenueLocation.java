@@ -6,7 +6,6 @@ import lombok.*;
 import rubberduck.org.sportinksystemalt.shared.common.util.GeohashUtil;
 import rubberduck.org.sportinksystemalt.user.domain.entity.VenueOwner;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,9 +47,10 @@ public class VenueLocation {
     @ToString.Exclude
     private VenueOwner venueOwner;
 
-    private LocalTime opening;
-
-    private LocalTime closing;
+    @OneToMany(mappedBy = "venueLocation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ToString.Exclude
+    private List<OpeningHours> openingHoursList;
 
     @Column(name = "average_rating")
     private Double averageRating;

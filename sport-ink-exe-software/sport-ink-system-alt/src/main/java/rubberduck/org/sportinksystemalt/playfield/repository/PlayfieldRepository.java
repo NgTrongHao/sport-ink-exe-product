@@ -1,7 +1,6 @@
 package rubberduck.org.sportinksystemalt.playfield.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import rubberduck.org.sportinksystemalt.playfield.domain.dto.PlayfieldResponse;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
 
 import java.util.List;

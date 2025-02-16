@@ -3,12 +3,14 @@ package rubberduck.org.sportinksystemalt.playfield.domain.dto;
 import java.util.List;
 import java.util.UUID;
 
-public record PlayfieldResponse(
+public record VenueLocationResponse(
         UUID id,
-        String name,
+        String address,
+        double latitude,
+        double longitude,
         String description,
         List<String> imageUrls,
-        boolean enabled,
-        List<PlayfieldSportResponse> playfieldSportList
+        String phoneContact,
+        List<OpeningHoursDTO> openingHours
 ) {
 }

@@ -55,4 +55,19 @@ public class AuthenticationController {
                         .build()
         );
     }
+
+    @PostMapping("/login-with-Google")
+    @Operation(
+            summary = "Login With Google REST API",
+            description = "Login With Google REST API is used to login a user with google."
+    )
+    public ResponseEntity<ApiResponse<UserWithTokenResponse>> loginWithGoogle(@RequestBody String token) {
+        return ResponseEntity.ok(
+                ApiResponse.<UserWithTokenResponse>builder()
+                        .code(200)
+                        .message("User login with google successfully")
+                        .data(authenticationService.loginWithGoogle(token))
+                        .build()
+        );
+    }
 }

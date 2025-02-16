@@ -12,7 +12,7 @@ import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/sport")
+@RequestMapping("/api/sports")
 @Tag(name = "Sport", description = "Sport REST API")
 public class SportController {
     private final ISportService sportService;
@@ -34,7 +34,7 @@ public class SportController {
                 .build());
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/get-all")
     @Operation(
             summary = "Get All Sports REST API",
             description = "Get All Sports REST API is used to get all sports."

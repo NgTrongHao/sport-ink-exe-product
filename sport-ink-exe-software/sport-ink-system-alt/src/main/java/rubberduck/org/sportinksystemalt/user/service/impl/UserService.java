@@ -1,17 +1,15 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
 import rubberduck.org.sportinksystemalt.shared.exception.handler.ResourceNotFoundException;
-import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
-import rubberduck.org.sportinksystemalt.user.domain.dto.CreatePlayerProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.CreateVenueOwnerProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.UpdateUserProfileRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
+import rubberduck.org.sportinksystemalt.user.domain.dto.*;
 import rubberduck.org.sportinksystemalt.user.domain.entity.*;
+import rubberduck.org.sportinksystemalt.user.domain.mapper.UserMapper;
 import rubberduck.org.sportinksystemalt.user.repository.PlayerRepository;
 import rubberduck.org.sportinksystemalt.user.repository.UserRepository;
 import rubberduck.org.sportinksystemalt.user.repository.VenueOwnerRepository;
@@ -23,34 +21,32 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static rubberduck.org.sportinksystemalt.user.domain.mapper.UserMapper.mapToUserProfileResponse;
+
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PlayerRepository playerRepository;
     private final VenueOwnerRepository venueOwnerRepository;
     private final TokenProvider tokenProvider;
-    private final CacheService cacheService;
     private final PasswordEncoder passwordEncoder;
 
-    private static final Long USER_CACHE_EXPIRATION = 900000L;
-
-    public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, CacheService cacheService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PlayerRepository playerRepository, VenueOwnerRepository venueOwnerRepository, TokenProvider tokenProvider, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.playerRepository = playerRepository;
         this.venueOwnerRepository = venueOwnerRepository;
         this.tokenProvider = tokenProvider;
-        this.cacheService = cacheService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
-    public UserWithTokenResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
+    @Cacheable(value = "user", key = "#username")
+    public UserProfileResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
         User user = findUserByUsername(username);
         updateUserFields(user, request);
         userRepository.save(user);
-        cacheUser(user);
-        return createUserWithTokenResponse(user);
+        return mapToUserProfileResponse(user);
     }
 
     private void updateUserFields(User user, UpdateUserProfileRequest request) {
@@ -110,7 +106,7 @@ public class UserService implements IUserService {
         updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.bio(), Role.PLAYER);
         createOrUpdatePlayer(user, request);
 
-        return createUserWithTokenResponse(user);
+        return generateUserWithTokenResponse(user);
     }
 
     @Override
@@ -121,12 +117,19 @@ public class UserService implements IUserService {
         updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.bio(), Role.VENUE_OWNER);
         createOrUpdateVenueOwner(user, request);
 
-        return createUserWithTokenResponse(user);
+        return generateUserWithTokenResponse(user);
     }
 
     @Override
     public VenueOwner getVenueOwnerById(UUID id) {
         return venueOwnerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Venue owner not found"));
+    }
+
+    @Override
+    @Cacheable(value = "user", key = "#username")
+    public UserProfileResponse getUserProfile(String username) {
+        User user = findUserByUsername(username);
+        return mapToUserProfileResponse(user);
     }
 
     private User findUserByUsername(String username) {
@@ -160,7 +163,6 @@ public class UserService implements IUserService {
         playerRepository.save(player);
 
         user.setPlayer(player);
-        cacheUser(user);
     }
 
     private void createOrUpdateVenueOwner(User user, CreateVenueOwnerProfileRequest request) {
@@ -174,7 +176,6 @@ public class UserService implements IUserService {
         venueOwnerRepository.save(venueOwner);
 
         user.setVenueOwner(venueOwner);
-        cacheUser(user);
     }
 
     private AccessToken generateAccessToken(User user) {
@@ -195,11 +196,7 @@ public class UserService implements IUserService {
         tokenProvider.invalidateAccessToken(username);
     }
 
-    private UserWithTokenResponse createUserWithTokenResponse(User user) {
-        return new UserWithTokenResponse(user, generateAccessToken(user));
-    }
-
-    private void cacheUser(User user) {
-        cacheService.put(user.getUsername(), user, USER_CACHE_EXPIRATION);
+    private UserWithTokenResponse generateUserWithTokenResponse(User user) {
+        return new UserWithTokenResponse(UserMapper.mapToUserProfileResponse(user), generateAccessToken(user));
     }
 }

@@ -10,8 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.shared.domain.TokenType;
+import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 
 import java.io.IOException;
 import java.util.List;
