@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Keystore files (Security-sensitive) ###
+serviceAccountKey.json
