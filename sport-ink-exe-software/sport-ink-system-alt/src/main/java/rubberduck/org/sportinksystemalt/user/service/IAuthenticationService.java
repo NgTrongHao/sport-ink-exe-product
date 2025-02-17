@@ -7,9 +7,9 @@ import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 
 public interface IAuthenticationService {
 
-    RegisterUserResponse register(RegisterUserRequest request);
-    LoginUserResponse login(LoginUserRequest request);
-
     UserWithTokenResponse register(RegisterUserRequest request);
 
+    LoginUserResponse login(LoginUserRequest request);
+
+    UserWithTokenResponse loginWithGoogle(String token);
 }

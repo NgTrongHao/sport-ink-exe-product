@@ -3,7 +3,6 @@ package rubberduck.org.sportinksystemalt.playfield.domain.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public record CreateVenueLocationRequest(
@@ -25,8 +24,6 @@ public record CreateVenueLocationRequest(
         @NotEmpty
         String phoneContact,
 
-        LocalTime opening,
-
-        LocalTime closing
+        List<OpeningHoursDTO> openingHours
 ) {
 }

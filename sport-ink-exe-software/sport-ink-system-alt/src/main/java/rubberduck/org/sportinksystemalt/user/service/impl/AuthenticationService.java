@@ -1,17 +1,21 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rubberduck.org.sportinksystemalt.shared.common.util.RandomStringUtil;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
-
-import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserRequest;
-import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserResponse;
 import rubberduck.org.sportinksystemalt.shared.service.mail.MailSender;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserRequest;
+import rubberduck.org.sportinksystemalt.user.domain.dto.LoginUserResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.RegisterUserRequest;
 import rubberduck.org.sportinksystemalt.user.domain.dto.UserWithTokenResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.Role;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
+import rubberduck.org.sportinksystemalt.user.domain.mapper.UserMapper;
 import rubberduck.org.sportinksystemalt.user.repository.UserRepository;
 import rubberduck.org.sportinksystemalt.user.service.IAuthenticationService;
 
@@ -104,14 +108,13 @@ public class AuthenticationService implements IAuthenticationService {
     private UserWithTokenResponse buildRegisterUserResponse(User user, AccessToken accessToken) {
         return UserWithTokenResponse.builder()
                 .accessToken(accessToken)
-                .user(user)
+                .user(UserMapper.mapToUserProfileResponse(user))
                 .build();
     }
 
-
     @Override
     public LoginUserResponse login(LoginUserRequest request) {
-        User user = userRepository.findByUsername(request.username());
+        User user = userRepository.findByUsername(request.username()).orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid username or password");
@@ -119,7 +122,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         AccessToken accessToken = generateAccessToken(user);
 
-        cacheAccessToken(user, accessToken);
+        tokenProvider.cacheAccessToken(accessToken);
 
         return buildLoginUserResponse(user, accessToken);
     }
@@ -129,6 +132,38 @@ public class AuthenticationService implements IAuthenticationService {
                 .accessToken(accessToken)
                 .user(user)
                 .build();
+    }
+
+    @Override
+    public UserWithTokenResponse loginWithGoogle(String token) {
+        try {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+            String email = decodedToken.getEmail();
+            String username = email.split("@")[0];
+            String firstName = decodedToken.getName();
+            String profilePicture = decodedToken.getPicture();
+
+            User user = userRepository.findByEmail(email).orElseGet(() -> saveUser(
+                    User.builder()
+                            .email(email)
+                            .username(username)
+                            .password(passwordEncoder.encode(RandomStringUtil.randomAlphaNumeric(6)))
+                            .firstName(firstName)
+                            .profilePicture(profilePicture)
+                            .roles(Set.of(Role.REGISTRATION_USER))
+                            .build()
+            ));
+
+            AccessToken accessToken = generateAccessToken(user);
+            tokenProvider.cacheAccessToken(accessToken);
+
+            return UserWithTokenResponse.builder()
+                    .accessToken(accessToken)
+                    .user(UserMapper.mapToUserProfileResponse(user))
+                    .build();
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

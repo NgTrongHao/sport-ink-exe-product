@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -26,6 +27,10 @@ public class PlayfieldPricing {
     @JoinColumn(name = "playfield_sport_id")
     @JsonBackReference
     private PlayfieldSport playfieldSport;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DayOfWeek dayOfWeek;
 
     @Column(nullable = false, columnDefinition = "TIME")
     private LocalTime startTime;

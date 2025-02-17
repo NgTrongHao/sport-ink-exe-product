@@ -2,8 +2,6 @@ package rubberduck.org.sportinksystemalt.user.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.UUID;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player {
+public class Player implements java.io.Serializable {
     @Id
     private UUID userId;
 

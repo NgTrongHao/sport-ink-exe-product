@@ -2,6 +2,9 @@ package rubberduck.org.sportinksystemalt.playfield.service.impl;
 
 import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.CreateVenueLocationRequest;
+import rubberduck.org.sportinksystemalt.playfield.domain.dto.OpeningHoursDTO;
+import rubberduck.org.sportinksystemalt.playfield.domain.dto.VenueLocationResponse;
+import rubberduck.org.sportinksystemalt.playfield.domain.entity.OpeningHours;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.VenueLocation;
 import rubberduck.org.sportinksystemalt.playfield.repository.VenueLocationRepository;
 import rubberduck.org.sportinksystemalt.playfield.service.IVenueLocationService;
@@ -9,6 +12,7 @@ import rubberduck.org.sportinksystemalt.shared.common.util.GeohashUtil;
 import rubberduck.org.sportinksystemalt.user.repository.VenueOwnerRepository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +34,59 @@ public class VenueLocationService implements IVenueLocationService {
                 .description(request.description())
                 .imageUrls(request.imageUrls())
                 .phoneContact(request.phoneContact())
-                .opening(request.opening())
-                .closing(request.closing())
+                .openingHoursList(createOpeningHours(request.openingHours()))
                 .venueOwner(venueOwnerRepository.findByUser_Username(username))
                 .build();
         venueLocationRepository.save(venueLocation);
+    }
+
+    @Override
+    public VenueLocation findVenueLocationById(UUID id) {
+        return venueLocationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Venue location not found"));
+    }
+
+    @Override
+    public boolean isOwnerOfVenueLocation(UUID venueId, UUID ownerId) {
+        VenueLocation venueLocation = findVenueLocationById(venueId);
+        return venueLocation.getVenueOwner().getUserId().equals(ownerId);
+    }
+
+    @Override
+    public void approveVenueLocation(UUID venueLocationId) {
+        VenueLocation venueLocation = venueLocationRepository.findById(venueLocationId)
+                .orElseThrow(() -> new IllegalArgumentException("Venue location not found"));
+        venueLocation.setEnabled(true);
+        venueLocationRepository.save(venueLocation);
+    }
+
+    @Override
+    public VenueLocationResponse getVenueLocationById(UUID venueLocationId) {
+        VenueLocation venueLocation = findVenueLocationById(venueLocationId);
+
+        List<OpeningHoursDTO> openingHoursDTOs = venueLocation.getOpeningHoursList().stream()
+                .map(this::convertToOpeningHoursDTO)
+                .toList();
+
+        return new VenueLocationResponse(
+                venueLocation.getId(),
+                venueLocation.getAddress(),
+                venueLocation.getLatitude(),
+                venueLocation.getLongitude(),
+                venueLocation.getDescription(),
+                venueLocation.getImageUrls(),
+                venueLocation.getPhoneContact(),
+                openingHoursDTOs
+        );
+    }
+
+    private List<OpeningHours> createOpeningHours(List<OpeningHoursDTO> openingHoursDTOs) {
+        return openingHoursDTOs.stream()
+                .map(dto -> OpeningHours.builder()
+                        .dayOfWeek(dto.dayOfWeek())
+                        .openingTime(dto.openingTime())
+                        .closingTime(dto.closingTime())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public List<VenueLocation> findNearbyVenues(double latitude, double longitude, double radius) {
@@ -60,5 +112,13 @@ public class VenueLocationService implements IVenueLocationService {
                         Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c; // Distance in kilometers
+    }
+
+    private OpeningHoursDTO convertToOpeningHoursDTO(OpeningHours openingHours) {
+        return new OpeningHoursDTO(
+                openingHours.getDayOfWeek(),
+                openingHours.getOpeningTime(),
+                openingHours.getClosingTime()
+        );
     }
 }

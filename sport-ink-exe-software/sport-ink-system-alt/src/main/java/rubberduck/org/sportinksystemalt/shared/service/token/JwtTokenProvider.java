@@ -18,19 +18,15 @@ import java.util.Map;
 
 @Component
 public class JwtTokenProvider implements TokenProvider {
+    private final TokenCacheService tokenCacheService;
     @Value("${security.jwt.secret-key}")
     private String secretKey;
-
     @Value("${security.jwt.access-token-expiration-in-ms}")
     private long accessTokenExpiration;
-
     @Value("${security.jwt.refresh-token-expiration-in-ms}")
     private long refreshTokenExpiration;
-
     @Value("${security.jwt.email-verification-token-expiration-in-ms}")
     private long emailVerificationTokenExpiration;
-
-    private final TokenCacheService tokenCacheService;
 
     public JwtTokenProvider(TokenCacheService tokenCacheService) {
         this.tokenCacheService = tokenCacheService;
@@ -83,7 +79,9 @@ public class JwtTokenProvider implements TokenProvider {
         if (tokenCacheService.getAccessToken(keyValue) == null) {
             throw new BadCredentialsException("Invalid access token");
         }
-        System.out.println("Token in cache: " + tokenCacheService.getAccessToken(keyValue));
+        if (!tokenCacheService.getAccessToken(keyValue).equals(token)) {
+            throw new BadCredentialsException("Invalid access token");
+        }
     }
 
     @Override

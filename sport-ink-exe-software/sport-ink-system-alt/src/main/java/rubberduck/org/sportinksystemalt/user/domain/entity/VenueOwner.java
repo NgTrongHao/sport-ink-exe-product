@@ -22,7 +22,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VenueOwner {
+public class VenueOwner implements java.io.Serializable {
 
     @Id
     private UUID userId;
