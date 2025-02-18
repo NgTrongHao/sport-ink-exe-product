@@ -132,7 +132,8 @@ public class UserService implements IUserService {
         return mapToUserProfileResponse(user);
     }
 
-    private User findUserByUsername(String username) {
+    @Override
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
@@ -158,7 +159,7 @@ public class UserService implements IUserService {
             player.setUser(user);
             user.setPlayer(player);
         }
-        player.setGender(Gender.valueOf(request.gender()));
+        player.setGender(Gender.valueOf(request.gender().toUpperCase()));
         player.setPreferredSport(request.referenceSport());
         playerRepository.save(player);
 

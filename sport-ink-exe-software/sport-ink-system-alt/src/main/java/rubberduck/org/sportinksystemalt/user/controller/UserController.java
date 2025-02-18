@@ -2,6 +2,7 @@ package rubberduck.org.sportinksystemalt.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
@@ -39,7 +40,7 @@ public class UserController {
             summary = "Create Player Profile REST API",
             description = "Create Player Profile REST API is used to create a player profile."
     )
-    public ResponseEntity<ApiResponse<UserWithTokenResponse>> createPlayerProfile(@CurrentUser String username, @RequestBody CreatePlayerProfileRequest request) {
+    public ResponseEntity<ApiResponse<UserWithTokenResponse>> createPlayerProfile(@CurrentUser String username, @RequestBody @Valid CreatePlayerProfileRequest request) {
         return ResponseEntity.ok(
                 ApiResponse.<UserWithTokenResponse>builder()
                         .code(201)
@@ -54,7 +55,7 @@ public class UserController {
             summary = "Create Venue Owner Profile REST API",
             description = "Create Venue Owner Profile REST API is used to create a venue owner profile."
     )
-    public ResponseEntity<ApiResponse<UserWithTokenResponse>> createVenueOwnerProfile(@CurrentUser String username, @RequestBody CreateVenueOwnerProfileRequest request) {
+    public ResponseEntity<ApiResponse<UserWithTokenResponse>> createVenueOwnerProfile(@CurrentUser String username, @RequestBody @Valid CreateVenueOwnerProfileRequest request) {
         return ResponseEntity.ok(
                 ApiResponse.<UserWithTokenResponse>builder()
                         .code(201)
@@ -71,7 +72,7 @@ public class UserController {
     )
     public ResponseEntity<ApiResponse<UserProfileResponse>> updateUserProfile(
             @CurrentUser String username,
-            @RequestBody UpdateUserProfileRequest request) {
+            @RequestBody @Valid UpdateUserProfileRequest request) {
         return ResponseEntity.ok(
                 ApiResponse.<UserProfileResponse>builder()
                         .code(200)

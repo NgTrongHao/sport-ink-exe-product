@@ -6,6 +6,9 @@ import java.util.UUID;
 public record VenueLocationResponse(
         UUID id,
         String address,
+        String ward,
+        String district,
+        String city,
         double latitude,
         double longitude,
         String description,

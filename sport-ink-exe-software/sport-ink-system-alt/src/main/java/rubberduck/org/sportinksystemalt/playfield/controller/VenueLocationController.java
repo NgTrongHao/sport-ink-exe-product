@@ -2,6 +2,7 @@ package rubberduck.org.sportinksystemalt.playfield.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class VenueLocationController {
             summary = "Add Venue Location REST API",
             description = "Add Venue Location REST API is used to add a new venue location."
     )
-    public ResponseEntity<ApiResponse<String>> addVenueLocation(@CurrentUser String username, @RequestBody CreateVenueLocationRequest request) {
+    public ResponseEntity<ApiResponse<String>> addVenueLocation(@CurrentUser String username, @RequestBody @Valid CreateVenueLocationRequest request) {
         venueLocationService.addVenueLocation(username, request);
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .code(201)

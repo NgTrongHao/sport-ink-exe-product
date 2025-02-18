@@ -83,6 +83,7 @@ public class PlayfieldService implements IPlayfieldService {
         List<PlayfieldPricing> newPricingRules = request.pricingRules().stream()
                 .map(rule -> PlayfieldPricing.builder()
                         .playfieldSport(playfieldSport)
+                        .dayOfWeek(rule.dayOfWeek())
                         .startTime(rule.startTime())
                         .endTime(rule.endTime())
                         .pricePerHour(rule.pricePerHour())
@@ -93,6 +94,13 @@ public class PlayfieldService implements IPlayfieldService {
         playfieldSport.getPricingRules().addAll(newPricingRules);
 
         playfieldRepository.save(playfield);
+    }
+
+    @Override
+    public Playfield findPlayfieldById(UUID id) {
+        return playfieldRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Playfield not found")
+        );
     }
 
     private void validateVenueOwnership(UUID venueId, UUID venueOwnerId) {
@@ -129,7 +137,8 @@ public class PlayfieldService implements IPlayfieldService {
                     .toList();
 
             for (int i = 1; i < intervals.size(); i++) {
-                if (!intervals.get(i).getKey().isAfter(intervals.get(i - 1).getValue())) {
+                if (!intervals.get(i).getKey().isAfter(intervals.get(i - 1).getValue()) &&
+                        !intervals.get(i).getKey().equals(intervals.get(i - 1).getValue())) {
                     throw new IllegalArgumentException("Time intervals cannot overlap for " + entry.getKey());
                 }
             }

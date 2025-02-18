@@ -32,4 +32,8 @@ public interface VenueLocationRepository extends JpaRepository<VenueLocation, UU
 
     @Query("SELECT v FROM VenueLocation v WHERE v.geohash LIKE :geohashPrefix%")
     List<VenueLocation> findNearbyVenuesByGeohash(@Param("geohashPrefix") String geohashPrefix);
+
+    @Query("SELECT v FROM VenueLocation v WHERE LOWER(CONCAT(v.ward, ' ', v.district, ' ', v.city)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    List<VenueLocation> searchByAddress(@Param("searchTerm") String searchTerm);
+
 }

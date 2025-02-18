@@ -2,7 +2,9 @@ package rubberduck.org.sportinksystemalt.administration.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rubberduck.org.sportinksystemalt.administration.domain.dto.CreateSportRequest;
 import rubberduck.org.sportinksystemalt.administration.domain.dto.SportResponse;
@@ -22,11 +24,12 @@ public class SportController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(
             summary = "Add Sport REST API",
             description = "Add Sport REST API is used to add a new sport."
     )
-    public ResponseEntity<ApiResponse<String>> addSport(@RequestBody CreateSportRequest request) {
+    public ResponseEntity<ApiResponse<String>> addSport(@RequestBody @Valid CreateSportRequest request) {
         sportService.addSport(request);
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .code(201)

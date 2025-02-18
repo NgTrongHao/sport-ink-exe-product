@@ -1,6 +1,7 @@
 package rubberduck.org.sportinksystemalt.user.service;
 
 import rubberduck.org.sportinksystemalt.user.domain.dto.*;
+import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 import rubberduck.org.sportinksystemalt.user.domain.entity.VenueOwner;
 
 import java.util.UUID;
@@ -15,4 +16,6 @@ public interface IUserService {
     VenueOwner getVenueOwnerById(UUID id);
 
     UserProfileResponse getUserProfile(String username);
+
+    User findUserByUsername(String username);
 }
