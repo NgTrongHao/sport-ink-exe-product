@@ -119,18 +119,18 @@ public class PlaytimeService implements IPlaytimeService {
         List<PlaytimeResponse> responses = playdatePage.getContent().stream()
                 .map(this::mapToPlaytimeResponse)
                 .collect(Collectors.toList());
-        log.info("PlaytimeServiceImpl - getPlaytimeById() - end");
+        log.info("PlaytimeServiceImpl - getPlaytimesPageable() - end");
         return new PageImpl<>(responses, pageable, playdatePage.getTotalElements());
     }
 
     @Override
     public void deletePlaytime(UUID id) {
-        log.info("PlaytimeServiceImpl - getPlaytimesPageable() - start");
+        log.info("PlaytimeServiceImpl - deletePlaytime() - start");
 
         Playtime playtime = playtimeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playdate does not exist! id: " + id));
         playtime.setStatus("CLOSED");
-        log.info("PlaytimeServiceImpl - getPlaytimesPageable() - end");
+        log.info("PlaytimeServiceImpl - deletePlaytime() - end");
 
         playtimeRepository.save(playtime);
     }
