@@ -11,7 +11,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "venue_location", indexes = {
-        @Index(name = "idx_latitude_longitude", columnList = "latitude, longitude")
+        @Index(name = "idx_latitude_longitude", columnList = "latitude, longitude"),
+        @Index(name = "idx_address_components", columnList = "ward, district, city")
 }, uniqueConstraints = {})
 @Getter
 @Setter
@@ -24,6 +25,7 @@ public class VenueLocation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String address;
 
     @Column(name = "phone_contact", nullable = false)
@@ -32,6 +34,15 @@ public class VenueLocation {
     private Double latitude;
 
     private Double longitude;
+
+    @Column(nullable = false)
+    private String ward;
+
+    @Column(nullable = false)
+    private String district;
+
+    @Column(nullable = false)
+    private String city;
 
     private String description;
 

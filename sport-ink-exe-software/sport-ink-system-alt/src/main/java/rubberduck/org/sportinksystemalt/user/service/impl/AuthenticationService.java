@@ -147,7 +147,7 @@ public class AuthenticationService implements IAuthenticationService {
                     User.builder()
                             .email(email)
                             .username(username)
-                            .password(passwordEncoder.encode(RandomStringUtil.randomAlphaNumeric(6)))
+                            .password(passwordEncoder.encode(RandomStringUtil.randomAlphaNumericAndSpecialCharacter(6)))
                             .firstName(firstName)
                             .profilePicture(profilePicture)
                             .roles(Set.of(Role.REGISTRATION_USER))

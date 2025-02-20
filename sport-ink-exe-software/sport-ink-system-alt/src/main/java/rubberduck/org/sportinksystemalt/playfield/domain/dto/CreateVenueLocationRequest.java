@@ -12,6 +12,15 @@ public record CreateVenueLocationRequest(
         String address,
 
         @NotEmpty
+        String city,
+
+        @NotEmpty
+        String district,
+
+        @NotEmpty
+        String ward,
+
+        @NotEmpty
         @Pattern(regexp = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$")
         Double latitude,
 

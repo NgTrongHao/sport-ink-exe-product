@@ -16,5 +16,10 @@ public interface IUserService {
     VenueOwner getVenueOwnerById(UUID id);
 
     UserProfileResponse getUserProfile(String username);
+
     User getUserByUsername(String username);
+
+
+    User findUserByUsername(String username);
+
 }
