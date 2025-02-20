@@ -1,7 +1,10 @@
 package rubberduck.org.sportinksystemalt.playtime.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import rubberduck.org.sportinksystemalt.administration.domain.entity.Sport;
+import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 
@@ -32,16 +35,25 @@ public class Playtime {
     @JoinColumn(name = "playfield_sport_id", nullable = false)
     private PlayfieldSport playfieldSport;
 
-    @Column(name = "sport_id", nullable = false)
-    private UUID sportId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playfield_id")
+    @JsonBackReference
+    @ToString.Exclude
+    private Playfield playfield;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sport_id")
+    @ToString.Exclude
+    private Sport sport;
+
+
 
     // bookmaker
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookmaker_id", nullable = false)
     private User bookmaker;
 
-    @Column(name = "playfield_id", nullable = false)
-    private UUID playfieldId;
+
 
 
     @Column(name = "start_time", nullable = false)
@@ -56,7 +68,7 @@ public class Playtime {
     @Column(nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "playdate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "playtime", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<PlaytimeParticipant> participants;
 

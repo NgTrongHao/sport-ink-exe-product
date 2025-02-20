@@ -35,7 +35,6 @@ public class PlaytimeService implements IPlaytimeService {
 
     private final PlaytimeRepository playtimeRepository;
     private final PlaytimeParticipantRepository playtimeParticipantRepository;
-    //private final PlayfieldSportRepository playfieldSportRepository;
     private final IPlayfieldService playfieldService;
 
     public PlaytimeService(PlaytimeRepository playtimeRepository,
@@ -58,8 +57,6 @@ public class PlaytimeService implements IPlaytimeService {
             throw new IllegalArgumentException("maxPlayers must be greater than 0");
         }
 
-//        PlayfieldSport playfieldSport = playfieldSportRepository.findById(request.playfieldSportId())
-//                .orElseThrow(() -> new RuntimeException("PlayfieldSport does not exist! id: " + request.playfieldSportId()));
 
         // Getplayfield by playfieldId
         Playfield playfield = playfieldService.getPlayfieldById(request.playfieldId());
@@ -72,13 +69,10 @@ public class PlaytimeService implements IPlaytimeService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Playfield does not support the given sport id: " + request.sportId()));
 
-//        UUID playfieldId = playfieldSport.getPlayfield() != null ? playfieldSport.getPlayfield().getId() : null;
-//        UUID sportId = playfieldSport.getSport() != null ? playfieldSport.getSport().getId() : null;
-
         Playtime playtime = Playtime.builder()
                 .playfieldSport(playfieldSport)
-                .playfieldId(request.playfieldId())
-                .sportId(request.sportId())
+                .playfield(playfield)
+                .sport(playfieldSport.getSport())
                 .startTime(request.startTime())
                 .endTime(request.endTime())
                 .maxPlayers(request.maxPlayers())
@@ -145,8 +139,8 @@ public class PlaytimeService implements IPlaytimeService {
         return new PlaytimeResponse(
                 playtime.getId(),
                 playtime.getPlayfieldSport() != null ? playtime.getPlayfieldSport().getId() : null,
-                playtime.getPlayfieldId(),
-                playtime.getSportId(),
+                playtime.getPlayfield() != null ? playtime.getPlayfield().getId() : null,
+                playtime.getSport() != null ? playtime.getSport().getId() : null,
                 playtime.getBookmaker() != null ? playtime.getBookmaker().getUserId() : null,
                 playtime.getStartTime(),
                 playtime.getEndTime(),
