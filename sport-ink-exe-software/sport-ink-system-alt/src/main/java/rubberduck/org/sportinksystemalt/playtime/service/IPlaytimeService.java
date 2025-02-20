@@ -7,7 +7,7 @@ import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeResponse;
 import java.util.UUID;
 
 public interface IPlaytimeService {
-    PlaytimeResponse createPlaytime(CreatePlaytimeRequest request);
+    PlaytimeResponse createPlaytime(String username, CreatePlaytimeRequest request);
     PlaytimeResponse getPlaytimeById(UUID id);
 
     void deletePlaytime(UUID id);

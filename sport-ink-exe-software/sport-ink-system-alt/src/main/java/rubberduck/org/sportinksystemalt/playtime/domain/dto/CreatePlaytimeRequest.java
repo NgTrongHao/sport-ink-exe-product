@@ -9,7 +9,6 @@ import java.util.UUID;
 public record CreatePlaytimeRequest(
         @NotNull UUID playfieldId,
         @NotNull UUID sportId,
-        @NotNull UUID bookmakerId,
         @NotNull LocalDateTime startTime,
         @NotNull LocalDateTime endTime,
         @Positive int maxPlayers

@@ -4,6 +4,7 @@ package rubberduck.org.sportinksystemalt.playtime.domain.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,6 @@ public record PlaytimeResponse(
         @NotNull LocalDateTime startTime,
         @NotNull LocalDateTime endTime,
         @Positive int maxPlayers,
-        @NotEmpty String status,
+        @NotEmpty PlaytimeStatus status,
         @NotNull List<PlaytimeParticipantResponse> participants
 ) {}

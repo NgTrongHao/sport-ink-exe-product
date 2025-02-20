@@ -15,11 +15,14 @@ import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeResponse;
 import rubberduck.org.sportinksystemalt.playtime.domain.entity.ParticipantRole;
 import rubberduck.org.sportinksystemalt.playtime.domain.entity.Playtime;
 import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeParticipant;
+import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeStatus;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeParticipantRepository;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeRepository;
 import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
+import rubberduck.org.sportinksystemalt.user.domain.dto.UserProfileResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
+import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,18 +39,20 @@ public class PlaytimeService implements IPlaytimeService {
     private final PlaytimeRepository playtimeRepository;
     private final PlaytimeParticipantRepository playtimeParticipantRepository;
     private final IPlayfieldService playfieldService;
-
+    private final IUserService userService;
     public PlaytimeService(PlaytimeRepository playtimeRepository,
                            PlaytimeParticipantRepository playtimeParticipantRepository,
-                           IPlayfieldService playfieldService) {
+                           IPlayfieldService playfieldService,
+                           IUserService userService) {
         this.playtimeRepository = playtimeRepository;
         this.playtimeParticipantRepository = playtimeParticipantRepository;
         this.playfieldService = playfieldService;
+        this.userService = userService;
     }
     @Override
-    public PlaytimeResponse createPlaytime(CreatePlaytimeRequest request) {
+    public PlaytimeResponse createPlaytime(String username, CreatePlaytimeRequest request) {
 
-        log.info("PlaytimeServiceImpl - createPlaytime() - start");
+        log.info("PlaytimeService - createPlaytime() - start");
         // validate
         if (!request.startTime().isBefore(request.endTime())) {
             throw new IllegalArgumentException("startTime must be before endTime");
@@ -76,12 +81,17 @@ public class PlaytimeService implements IPlaytimeService {
                 .startTime(request.startTime())
                 .endTime(request.endTime())
                 .maxPlayers(request.maxPlayers())
-                .status("OPEN")
+                .status(PlaytimeStatus.OPEN)
                 .participants(new ArrayList<>())
                 .build();
-        //TODO: fix later this line || bookmaker will take from security context. IDK what kind is it.
-        User bookmaker = new User();
-        bookmaker.setUserId(request.bookmakerId());
+        User bookmaker;
+        try {
+            bookmaker = userService.getUserByUsername(username);
+        } catch(Exception e) {
+            throw new RuntimeException("Invalid user provided in username: " + username, e);
+        }
+        playtime.setBookmaker(bookmaker);
+
         PlaytimeParticipant bookmakerParticipant = PlaytimeParticipant.builder()
                 .playtime(playtime)
                 .user(bookmaker)
@@ -91,7 +101,7 @@ public class PlaytimeService implements IPlaytimeService {
         playtime.getParticipants().add(bookmakerParticipant);
 
         Playtime savedPlaytime = playtimeRepository.save(playtime);
-        log.info("PlaytimeServiceImpl - createPlaytime() - end");
+        log.info("PlaytimeService - createPlaytime() - end");
         return mapToPlaytimeResponse(savedPlaytime);
     }
 
@@ -100,31 +110,31 @@ public class PlaytimeService implements IPlaytimeService {
         log.info("PlaytimeServiceImpl - getPlaytimeById() - start");
         Playtime playtime = playtimeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playdate does not exist! id: " + id));
-        log.info("PlaytimeServiceImpl - getPlaytimeById() - end");
+        log.info("PlaytimeService - getPlaytimeById() - end");
         return mapToPlaytimeResponse(playtime);
     }
 
     @Override
     public Page<PlaytimeResponse> getPlaytimesPageable(int page, int size) {
-        log.info("PlaytimeServiceImpl - getPlaytimesPageable() - start");
+        log.info("PlaytimeService - getPlaytimesPageable() - start");
         Pageable pageable = PageRequest.of(page, size);
         Page<Playtime> playdatePage = playtimeRepository.findAll(pageable);
 
         List<PlaytimeResponse> responses = playdatePage.getContent().stream()
                 .map(this::mapToPlaytimeResponse)
                 .collect(Collectors.toList());
-        log.info("PlaytimeServiceImpl - getPlaytimesPageable() - end");
+        log.info("PlaytimeService - getPlaytimesPageable() - end");
         return new PageImpl<>(responses, pageable, playdatePage.getTotalElements());
     }
 
     @Override
     public void deletePlaytime(UUID id) {
-        log.info("PlaytimeServiceImpl - deletePlaytime() - start");
+        log.info("PlaytimeService - deletePlaytime() - start");
 
         Playtime playtime = playtimeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playdate does not exist! id: " + id));
-        playtime.setStatus("CLOSED");
-        log.info("PlaytimeServiceImpl - deletePlaytime() - end");
+        playtime.setStatus(PlaytimeStatus.CLOSED);
+        log.info("PlaytimeService - deletePlaytime() - end");
 
         playtimeRepository.save(playtime);
     }

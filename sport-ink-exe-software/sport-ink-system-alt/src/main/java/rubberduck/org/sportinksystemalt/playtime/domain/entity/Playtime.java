@@ -54,8 +54,6 @@ public class Playtime {
     private User bookmaker;
 
 
-
-
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
@@ -65,8 +63,9 @@ public class Playtime {
     @Column(name = "max_players", nullable = false)
     private int maxPlayers;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PlaytimeStatus status;
 
     @OneToMany(mappedBy = "playtime", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
