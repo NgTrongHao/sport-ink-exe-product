@@ -5,18 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.CreatePlaytimeRequest;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeResponse;
-import rubberduck.org.sportinksystemalt.playtime.service.PlaytimeService;
+import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
 import rubberduck.org.sportinksystemalt.shared.common.Constants;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/playdates")
-public class PlayDateController {
-    private final PlaytimeService playdateService;
+@RequestMapping("/api/playtimes")
+public class PlayTimeController {
+    private final IPlaytimeService playdateService;
 
 
-    public PlayDateController(PlaytimeService playdateService) {
+    public PlayTimeController(IPlaytimeService playdateService) {
         this.playdateService = playdateService;
     }
 
@@ -31,10 +31,7 @@ public class PlayDateController {
     }
 
     @GetMapping("/paged")
-    public Page<PlaytimeResponse> getPlaydatesPageable(
-            @RequestParam(value = "page", defaultValue = "" + Constants.DEFAULT_PAGE_NUMBER) int page,
-            @RequestParam(value = "size", defaultValue = "" + Constants.DEFAULT_PAGE_SIZE) int size
-    ) {
+    public Page<PlaytimeResponse> getPlaytimesPageable(@RequestParam(value = "page", defaultValue = "" + Constants.DEFAULT_PAGE_NUMBER) int page, @RequestParam(value = "size", defaultValue = "" + Constants.DEFAULT_PAGE_SIZE) int size) {
         return playdateService.getPlaytimesPageable(page, size);
     }
 

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
 import rubberduck.org.sportinksystemalt.playfield.service.IPlayfieldService;
-import rubberduck.org.sportinksystemalt.playfield.service.impl.PlayfieldService;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.CreatePlaytimeRequest;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeParticipantResponse;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeResponse;
@@ -18,9 +17,8 @@ import rubberduck.org.sportinksystemalt.playtime.domain.entity.Playtime;
 import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeParticipant;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeParticipantRepository;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeRepository;
-import rubberduck.org.sportinksystemalt.playtime.service.PlaytimeService;
+import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
-import rubberduck.org.sportinksystemalt.playfield.repository.PlayfieldSportRepository;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 
 import java.time.LocalDateTime;
@@ -31,18 +29,18 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class PlaytimeServiceImpl implements PlaytimeService {
+public class PlaytimeService implements IPlaytimeService {
 
-    private static final Logger log = LoggerFactory.getLogger(PlaytimeServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(PlaytimeService.class);
 
     private final PlaytimeRepository playtimeRepository;
     private final PlaytimeParticipantRepository playtimeParticipantRepository;
     //private final PlayfieldSportRepository playfieldSportRepository;
     private final IPlayfieldService playfieldService;
 
-    public PlaytimeServiceImpl(PlaytimeRepository playtimeRepository,
-                               PlaytimeParticipantRepository playtimeParticipantRepository,
-                               IPlayfieldService playfieldService) {
+    public PlaytimeService(PlaytimeRepository playtimeRepository,
+                           PlaytimeParticipantRepository playtimeParticipantRepository,
+                           IPlayfieldService playfieldService) {
         this.playtimeRepository = playtimeRepository;
         this.playtimeParticipantRepository = playtimeParticipantRepository;
         this.playfieldService = playfieldService;
