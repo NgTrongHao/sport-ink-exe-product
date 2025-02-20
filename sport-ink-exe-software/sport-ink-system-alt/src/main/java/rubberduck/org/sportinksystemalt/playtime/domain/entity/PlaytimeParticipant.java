@@ -1,10 +1,11 @@
-package rubberduck.org.sportinksystemalt.playdate.domain.entity;
+package rubberduck.org.sportinksystemalt.playtime.domain.entity;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.*;
+import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 
 @Entity
 @Table(name = "playdate_participant", indexes = {
@@ -18,18 +19,23 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlaydateParticipant {
+public class PlaytimeParticipant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "playdate_id", nullable = false)
-    private Playdate playdate;
+    private Playtime playtime;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "joined_at", nullable = false)
     private LocalDateTime joinedAt;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ParticipantRole role;
 }

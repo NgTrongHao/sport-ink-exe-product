@@ -95,6 +95,13 @@ public class PlayfieldService implements IPlayfieldService {
         playfieldRepository.save(playfield);
     }
 
+    @Override
+    public Playfield getPlayfieldById(UUID uuid) {
+        Playfield playfield = playfieldRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Playfield not found"));
+        return playfield;
+    }
+
     private void validateVenueOwnership(UUID venueId, UUID venueOwnerId) {
         if (!venueLocationService.isOwnerOfVenueLocation(venueId, venueOwnerId)) {
             throw new IllegalArgumentException("Venue owner is not the owner of the venue location");
