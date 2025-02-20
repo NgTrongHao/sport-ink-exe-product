@@ -2,6 +2,7 @@ package rubberduck.org.sportinksystemalt.playfield.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +31,7 @@ public class PlayfieldController {
             summary = "Add Playfield REST API",
             description = "Add Playfield REST API is used to add a new playfield to the venue location."
     )
-    public ResponseEntity<ApiResponse<String>> addPlayfield(@RequestBody CreatePlayfieldRequest request) {
+    public ResponseEntity<ApiResponse<String>> addPlayfield(@RequestBody @Valid CreatePlayfieldRequest request) {
         playfieldService.addPlayfield(request);
         return new ResponseEntity<>(ApiResponse.<String>builder()
                 .code(201)
@@ -73,7 +74,7 @@ public class PlayfieldController {
             summary = "Update Playfield Price REST API",
             description = "Update Playfield Price REST API is used to update the price of a playfield."
     )
-    public ResponseEntity<ApiResponse<String>> updatePlayfieldPrice(@RequestBody UpdatePricingBySportRequest request) {
+    public ResponseEntity<ApiResponse<String>> updatePlayfieldPrice(@RequestBody @Valid UpdatePricingBySportRequest request) {
         playfieldService.updatePlayfieldPrice(request);
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .code(200)

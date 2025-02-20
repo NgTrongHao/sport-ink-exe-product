@@ -18,6 +18,16 @@ public class RandomStringUtil {
     public static String randomAlphaNumeric(int numberOfCharacter) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < numberOfCharacter; i++) {
+            int number = randomNumber(0, ALPHA_NUMERIC.length() - 1);
+            char ch = ALPHA_NUMERIC.charAt(number);
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
+
+    public static String randomAlphaNumericAndSpecialCharacter(int numberOfCharacter) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberOfCharacter; i++) {
             int number = randomNumber(0, ALL.length() - 1);
             char ch = ALL.charAt(number);
             sb.append(ch);

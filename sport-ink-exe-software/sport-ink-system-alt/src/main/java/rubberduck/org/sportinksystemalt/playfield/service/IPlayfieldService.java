@@ -3,6 +3,7 @@ package rubberduck.org.sportinksystemalt.playfield.service;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.CreatePlayfieldRequest;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.PlayfieldResponse;
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.UpdatePricingBySportRequest;
+import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
 
 import java.util.UUID;
 
@@ -14,4 +15,6 @@ public interface IPlayfieldService {
     void approvePlayfield(UUID playfieldId);
 
     void updatePlayfieldPrice(UpdatePricingBySportRequest request);
+
+    Playfield findPlayfieldById(UUID id);
 }

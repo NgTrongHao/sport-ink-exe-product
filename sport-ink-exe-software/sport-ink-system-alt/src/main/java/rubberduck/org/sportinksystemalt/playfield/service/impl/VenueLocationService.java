@@ -29,14 +29,20 @@ public class VenueLocationService implements IVenueLocationService {
     public void addVenueLocation(String username, CreateVenueLocationRequest request) {
         VenueLocation venueLocation = VenueLocation.builder()
                 .address(request.address())
+                .ward(request.ward())
+                .district(request.district())
+                .city(request.city())
                 .latitude(request.latitude())
                 .longitude(request.longitude())
                 .description(request.description())
                 .imageUrls(request.imageUrls())
                 .phoneContact(request.phoneContact())
-                .openingHoursList(createOpeningHours(request.openingHours()))
                 .venueOwner(venueOwnerRepository.findByUser_Username(username))
                 .build();
+
+        List<OpeningHours> openingHours = createOpeningHours(venueLocation, request.openingHours());
+        venueLocation.setOpeningHoursList(openingHours);
+
         venueLocationRepository.save(venueLocation);
     }
 
@@ -70,6 +76,9 @@ public class VenueLocationService implements IVenueLocationService {
         return new VenueLocationResponse(
                 venueLocation.getId(),
                 venueLocation.getAddress(),
+                venueLocation.getWard(),
+                venueLocation.getDistrict(),
+                venueLocation.getCity(),
                 venueLocation.getLatitude(),
                 venueLocation.getLongitude(),
                 venueLocation.getDescription(),
@@ -79,9 +88,10 @@ public class VenueLocationService implements IVenueLocationService {
         );
     }
 
-    private List<OpeningHours> createOpeningHours(List<OpeningHoursDTO> openingHoursDTOs) {
+    private List<OpeningHours> createOpeningHours(VenueLocation venueLocation, List<OpeningHoursDTO> openingHoursDTOs) {
         return openingHoursDTOs.stream()
                 .map(dto -> OpeningHours.builder()
+                        .venueLocation(venueLocation)
                         .dayOfWeek(dto.dayOfWeek())
                         .openingTime(dto.openingTime())
                         .closingTime(dto.closingTime())
