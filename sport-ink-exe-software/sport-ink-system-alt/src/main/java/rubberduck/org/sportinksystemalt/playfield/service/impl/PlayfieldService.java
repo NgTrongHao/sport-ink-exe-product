@@ -97,11 +97,6 @@ public class PlayfieldService implements IPlayfieldService {
     }
 
     @Override
-    public Playfield getPlayfieldById(UUID uuid) {
-        Playfield playfield = playfieldRepository.findById(uuid)
-                .orElseThrow(() -> new IllegalArgumentException("Playfield not found"));
-        return playfield;
-
     public Playfield findPlayfieldById(UUID id) {
         return playfieldRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Playfield not found")
