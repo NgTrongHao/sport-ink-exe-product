@@ -17,9 +17,6 @@ public interface IUserService {
 
     UserProfileResponse getUserProfile(String username);
 
-    User getUserByUsername(String username);
-
-
     User findUserByUsername(String username);
 
 }

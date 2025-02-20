@@ -16,7 +16,5 @@ public interface IPlayfieldService {
 
     void updatePlayfieldPrice(UpdatePricingBySportRequest request);
 
-    Playfield getPlayfieldById(UUID uuid);
-
     Playfield findPlayfieldById(UUID id);
 }

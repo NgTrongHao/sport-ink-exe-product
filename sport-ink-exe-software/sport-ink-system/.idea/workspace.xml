@@ -5,76 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b0ec8df-ebb0-48c4-b9dd-f3246beb93bf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/adapter/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/dsGateway/UserDsGateway.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/mapper/UserMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/adapter/src/main/java/rubberduck/org/sportinksystem/adapter/rest/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/application/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/application/src/main/java/rubberduck/org/sportinksystem/SportInkSystemApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/application/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/application/src/main/resources/templates/welcome-email.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/InputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/cache/CacheService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/cache/TokenCacheService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/hashing/PasswordHasher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/mail/MailSender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/MessageEncryptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/QueueMessageHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/queue/QueueProducer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/token/TokenProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/RegisterRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/RegisterResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/model/UserInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/usecase/create/RegisterInteractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/application-service/src/main/java/rubberduck/org/sportinksystem/core/applicationservice/user/usecase/create/RegisterUsecase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/AbstractEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/message/EmailMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/AccessToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/BaseToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/EmailVerificationToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/token/RefreshToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/user/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/entity/user/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/exception/MailSendingException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/exception/UserAlreadyExistsException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Email.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/FullName.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Gender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Phone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/core/domain/src/main/java/rubberduck/org/sportinksystem/core/domain/valueObject/Username.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/cache/RedisCacheService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/cache/RedisTokenCacheService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/QueueConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/TemplateEngineConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/ApplicationAuthenticationEntryPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/config/security/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/orm/RoleEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/orm/UserEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/data_access/persistence/UserEntityRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/encrypt/AesMessageEncryptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/hashing/BcryptPasswordHasher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/mail/EmailMessageHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/mail/QueueBasedMailSender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/queue/RabbitMQConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/queue/RabbitMQProducer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/system/infrastructure/src/main/java/rubberduck/org/sportinksystem/infrastructure/token/JwtTokenProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/controller/BookingController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/domain/dto/CreateBookingRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/domain/entity/Booking.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/domain/entity/BookingHistory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/domain/entity/BookingStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/repository/BookingRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/service/IBookingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/booking/service/impl/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/playfield/service/IPlayfieldService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/playfield/service/IPlayfieldService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/playfield/service/impl/PlayfieldService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/playfield/service/impl/PlayfieldService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/user/service/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/user/service/IUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/user/service/impl/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sport-ink-system-alt/src/main/java/rubberduck/org/sportinksystemalt/user/service/impl/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +98,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.SportInkSystemApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;haont-chat&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/RubberDuck/sport-ink-exe-software/sport-ink-system/system/infrastructure/src/main/resources/templates&quot;,
@@ -199,8 +142,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
       </set>
     </attachedChunks>
   </component>
@@ -231,6 +174,9 @@
       <workItem from="1736265911891" duration="3528000" />
       <workItem from="1736269512828" duration="14000" />
       <workItem from="1736305120848" duration="5497000" />
+      <workItem from="1739510671486" duration="1195000" />
+      <workItem from="1739783285241" duration="103000" />
+      <workItem from="1739803406878" duration="144000" />
     </task>
     <servers />
   </component>

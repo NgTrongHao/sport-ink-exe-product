@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
+import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
 import rubberduck.org.sportinksystemalt.playfield.service.IPlayfieldService;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.CreatePlaytimeRequest;
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeParticipantResponse;
@@ -19,8 +20,6 @@ import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeStatus;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeParticipantRepository;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeRepository;
 import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
-import rubberduck.org.sportinksystemalt.playfield.domain.entity.PlayfieldSport;
-import rubberduck.org.sportinksystemalt.user.domain.dto.UserProfileResponse;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
@@ -40,6 +39,7 @@ public class PlaytimeService implements IPlaytimeService {
     private final PlaytimeParticipantRepository playtimeParticipantRepository;
     private final IPlayfieldService playfieldService;
     private final IUserService userService;
+
     public PlaytimeService(PlaytimeRepository playtimeRepository,
                            PlaytimeParticipantRepository playtimeParticipantRepository,
                            IPlayfieldService playfieldService,
@@ -49,6 +49,7 @@ public class PlaytimeService implements IPlaytimeService {
         this.playfieldService = playfieldService;
         this.userService = userService;
     }
+
     @Override
     public PlaytimeResponse createPlaytime(String username, CreatePlaytimeRequest request) {
 
@@ -63,8 +64,8 @@ public class PlaytimeService implements IPlaytimeService {
         }
 
 
-        // Getplayfield by playfieldId
-        Playfield playfield = playfieldService.getPlayfieldById(request.playfieldId());
+        // Get playfield by playfieldId
+        Playfield playfield = playfieldService.findPlayfieldById(request.playfieldId());
         if (playfield == null) {
             throw new RuntimeException("Playfield not found with id: " + request.playfieldId());
         }
@@ -86,8 +87,8 @@ public class PlaytimeService implements IPlaytimeService {
                 .build();
         User bookmaker;
         try {
-            bookmaker = userService.getUserByUsername(username);
-        } catch(Exception e) {
+            bookmaker = userService.findUserByUsername(username);
+        } catch (Exception e) {
             throw new RuntimeException("Invalid user provided in username: " + username, e);
         }
         playtime.setBookmaker(bookmaker);

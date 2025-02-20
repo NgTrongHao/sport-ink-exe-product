@@ -133,15 +133,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-
-    public User getUserByUsername(String username) {
-        User user = findUserByUsername(username);
-        return user;
-    }
-
-    private User findUserByUsername(String username) {
-
-   
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
