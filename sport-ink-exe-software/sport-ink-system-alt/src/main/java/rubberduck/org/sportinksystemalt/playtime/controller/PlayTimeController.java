@@ -14,6 +14,7 @@ import rubberduck.org.sportinksystemalt.shared.common.Constants;
 import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -47,7 +48,7 @@ public class PlayTimeController {
             summary = "Get Playtime by ID REST API",
             description = "Get Playtime REST API is used to Get playtime by id."
     )
-    public ResponseEntity<ApiResponse<PlaytimeResponse>> getPlaytimeById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<PlaytimeResponse>> getPlaydateById(@PathVariable UUID id) {
         PlaytimeResponse response = playdateService.getPlaytimeById(id);
         return ResponseEntity.ok(ApiResponse.<PlaytimeResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -70,16 +71,41 @@ public class PlayTimeController {
                 .build());
     }
 
+
+
     @DeleteMapping("/delete/{id}")
     @Operation(
             summary = "Delete Playtime REST API",
             description = "Delete Playtime REST API is used to delete playtime by id."
     )
-    public ResponseEntity<ApiResponse<String>> deletePlaytime(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<String>> deletePlaydate(@PathVariable UUID id) {
         playdateService.deletePlaytime(id);
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .code(HttpStatus.OK.value())
                 .message("Playtime deleted successfully")
+                .build());
+    }
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "Search Playtimes by criteria",
+            description = "Search Playtimes by following criterias: Sport, city, district, ward (Optional). " +
+                    "start date, end date with pagination."
+    )
+    public ResponseEntity<ApiResponse<Page<PlaytimeResponse>>> searchPlaytimes(
+            @RequestParam(required = false) UUID sportId,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String district,
+            @RequestParam(required = false) String ward,
+            @RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate,
+            @RequestParam(value = "page", defaultValue = "" + Constants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = "" + Constants.DEFAULT_PAGE_SIZE) int size) {
+        Page<PlaytimeResponse> response = playdateService.searchPlaytimes(sportId, city, district, ward, startDate, endDate, page, size);
+        return ResponseEntity.ok(ApiResponse.<Page<PlaytimeResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Playtimes fetched successfully")
+                .data(response)
                 .build());
     }
 
