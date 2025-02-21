@@ -129,6 +129,47 @@ public class PlaytimeService implements IPlaytimeService {
     }
 
     @Override
+    public PlaytimeResponse joinPlaytime(String username, UUID playtimeId) {
+        log.info("PlaytimeService - joinPlaytime() - start");
+        Playtime playtime = playtimeRepository.findById(playtimeId)
+                .orElseThrow(() -> new RuntimeException("Playtime does not exist with id: " + playtimeId));
+
+        if (playtime.getStatus() != PlaytimeStatus.OPEN) {
+            throw new RuntimeException("Playtime is not available to join.");
+        }
+
+        if (playtime.getParticipants().size() >= playtime.getMaxPlayers()) {
+            throw new RuntimeException("Playtime is full.");
+        }
+
+        boolean alreadyJoined = playtime.getParticipants().stream()
+                .anyMatch(p -> p.getUser().getUserId().equals(userService.findUserByUsername(username).getUserId()));
+        if (alreadyJoined) {
+            throw new RuntimeException("User has joined this playtime.");
+        }
+
+        User user = userService.findUserByUsername(username);
+        PlaytimeParticipant participant = PlaytimeParticipant.builder()
+                .playtime(playtime)
+                .user(user)
+                .joinedAt(LocalDateTime.now())
+                .role(ParticipantRole.MEMBER)
+                .build();
+
+        playtime.getParticipants().add(participant);
+
+        Playtime updatedPlaytime = playtimeRepository.save(playtime);
+
+        if (updatedPlaytime.getParticipants().size() >= updatedPlaytime.getMaxPlayers()) {
+            updatedPlaytime.setStatus(PlaytimeStatus.FULL);
+            updatedPlaytime = playtimeRepository.save(updatedPlaytime);
+        }
+
+        log.info("PlaytimeService - joinPlaytime() - end");
+        return mapToPlaytimeResponse(updatedPlaytime);
+    }
+
+    @Override
     public void deletePlaytime(UUID id) {
         log.info("PlaytimeService - deletePlaytime() - start");
 
