@@ -108,4 +108,18 @@ public class PlayTimeController {
                 .data(response)
                 .build());
     }
+
+    @PostMapping("/{id}/join")
+    @Operation(
+            summary = "Join Playtime REST API",
+            description = "User who is not bookmaker can join an OPEN playtime if it not reach max participants"
+    )
+    public ResponseEntity<ApiResponse<PlaytimeResponse>> joinPlaytime(@CurrentUser String username, @PathVariable UUID id) {
+        PlaytimeResponse response = playdateService.joinPlaytime(username, id);
+        return ResponseEntity.ok(ApiResponse.<PlaytimeResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Joined playtime successfully")
+                .data(response)
+                .build());
+    }
 }

@@ -13,7 +13,11 @@ public interface IPlaytimeService {
 
     void deletePlaytime(UUID id);
     Page<PlaytimeResponse> getPlaytimesPageable(int page, int size);
+
     Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward,
                                            LocalDateTime startDate, LocalDateTime endDate,
                                            int page, int size);
+
+    PlaytimeResponse joinPlaytime(String username, UUID playtimeId);
+
 }
