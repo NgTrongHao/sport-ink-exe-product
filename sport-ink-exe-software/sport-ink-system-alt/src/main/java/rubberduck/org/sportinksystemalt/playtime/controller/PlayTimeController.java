@@ -11,6 +11,7 @@ import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
 import rubberduck.org.sportinksystemalt.shared.common.Constants;
 import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -51,6 +52,8 @@ public class PlayTimeController {
         return playdateService.getPlaytimesPageable(page, size);
     }
 
+
+
     @DeleteMapping("/delete/{id}")
     @Operation(
             summary = "Delete Playtime REST API",
@@ -58,5 +61,23 @@ public class PlayTimeController {
     )
     public void deletePlaydate(@PathVariable UUID id) {
         playdateService.deletePlaytime(id);
+    }
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "Search Playtimes by criteria",
+            description = "Search Playtimes by following criterias: Sport, city, district, ward (Optional). " +
+                    "start date, end date with pagination."
+    )
+    public Page<PlaytimeResponse> searchPlaytimes(
+            @RequestParam(required = false) UUID sportId,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String district,
+            @RequestParam(required = false) String ward,
+            @RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate,
+            @RequestParam(value = "page", defaultValue = "" + Constants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = "" + Constants.DEFAULT_PAGE_SIZE) int size) {
+        return playdateService.searchPlaytimes(sportId, city, district, ward, startDate, endDate, page, size);
     }
 }

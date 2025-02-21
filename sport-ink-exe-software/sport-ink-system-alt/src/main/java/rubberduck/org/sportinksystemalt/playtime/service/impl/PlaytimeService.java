@@ -59,6 +59,9 @@ public class PlaytimeService implements IPlaytimeService {
             throw new IllegalArgumentException("startTime must be before endTime");
         }
 
+        if (request.startTime().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("startTime cannot be sooner than present");
+        }
         if (request.maxPlayers() <= 0) {
             throw new IllegalArgumentException("maxPlayers must be greater than 0");
         }
@@ -126,6 +129,27 @@ public class PlaytimeService implements IPlaytimeService {
                 .collect(Collectors.toList());
         log.info("PlaytimeService - getPlaytimesPageable() - end");
         return new PageImpl<>(responses, pageable, playdatePage.getTotalElements());
+    }
+
+    @Override
+    public Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+        log.info("PlaytimeServive - searchPlaytimes() - start");
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("startDate must be before endDate");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Playtime> playtimesPage = playtimeRepository.searchPlaytimes(sportId, city, district, ward, startDate, endDate, pageable);
+
+        if (playtimesPage.isEmpty()) {
+            throw new RuntimeException("Cannot find available play time.");
+        }
+
+        List<PlaytimeResponse> responses = playtimesPage.getContent().stream()
+                .map(this::mapToPlaytimeResponse)
+                .collect(Collectors.toList());
+        log.info("PlaytimeService - searchPlaytimes() - end");
+        return new PageImpl<>(responses, pageable, playtimesPage.getTotalElements());
     }
 
     @Override
