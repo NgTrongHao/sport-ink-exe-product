@@ -137,7 +137,7 @@ public class PlaytimeService implements IPlaytimeService {
 
     @Override
     public Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
-        log.info("PlaytimeServive - searchPlaytimes() - start");
+        log.info("PlaytimeService - searchPlaytimes() - start");
         page -= 1;
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("startDate and endDate cannot be null");
