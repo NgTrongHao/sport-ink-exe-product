@@ -15,25 +15,25 @@ public class RedisTokenCacheService implements TokenCacheService {
 
     @Override
     public void addAccessToken(String key, String value, long expirationTime) {
-        String accessTokenKey = "access:" + key;
+        String accessTokenKey = "access::" + key;
         cacheService.put(accessTokenKey, value, expirationTime);
     }
 
     @Override
     public void addRefreshToken(String key, String value, long expirationTime) {
-        String refreshTokenKey = "refresh:" + key;
+        String refreshTokenKey = "refresh::" + key;
         cacheService.put(refreshTokenKey, value, expirationTime);
     }
 
     @Override
     public String getAccessToken(String key) {
-        String accessTokenKey = "access:" + key;
+        String accessTokenKey = "access::" + key;
         return (String) cacheService.get(accessTokenKey);
     }
 
     @Override
     public String getRefreshToken(String key) {
-        String refreshTokenKey = "refresh:" + key;
+        String refreshTokenKey = "refresh::" + key;
         return (String) cacheService.get(refreshTokenKey);
     }
 
