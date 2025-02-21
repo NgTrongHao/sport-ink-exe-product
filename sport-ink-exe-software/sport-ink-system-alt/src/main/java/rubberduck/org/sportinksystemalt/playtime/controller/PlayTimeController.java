@@ -38,7 +38,7 @@ public class PlayTimeController {
             summary = "Get Playtime by ID REST API",
             description = "Get Playtime REST API is used to Get playtime by id."
     )
-    public PlaytimeResponse getPlaydateById(@PathVariable UUID id) {
+    public PlaytimeResponse getPlaytimeById(@PathVariable UUID id) {
         return playdateService.getPlaytimeById(id);
     }
 
@@ -56,7 +56,16 @@ public class PlayTimeController {
             summary = "Delete Playtime REST API",
             description = "Delete Playtime REST API is used to delete playtime by id."
     )
-    public void deletePlaydate(@PathVariable UUID id) {
+    public void deletePlaytime(@PathVariable UUID id) {
         playdateService.deletePlaytime(id);
+    }
+
+    @PostMapping("/{id}/join")
+    @Operation(
+            summary = "Join Playtime REST API",
+            description = "User who is not bookmaker can join an OPEN playtime if it not reach max participants"
+    )
+    public PlaytimeResponse joinPlaytime(@CurrentUser String username, @PathVariable UUID id) {
+        return playdateService.joinPlaytime(username, id);
     }
 }

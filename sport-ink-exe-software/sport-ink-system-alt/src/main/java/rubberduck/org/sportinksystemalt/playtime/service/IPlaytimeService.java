@@ -12,4 +12,5 @@ public interface IPlaytimeService {
 
     void deletePlaytime(UUID id);
     Page<PlaytimeResponse> getPlaytimesPageable(int page, int size);
+    PlaytimeResponse joinPlaytime(String username, UUID playtimeId);
 }
