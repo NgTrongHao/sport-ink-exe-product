@@ -121,6 +121,10 @@ public class PlaytimeService implements IPlaytimeService {
     @Override
     public Page<PlaytimeResponse> getPlaytimesPageable(int page, int size) {
         log.info("PlaytimeService - getPlaytimesPageable() - start");
+        page -= 1;
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Page and size parameters must be non-negative");
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<Playtime> playdatePage = playtimeRepository.findAll(pageable);
 
@@ -134,6 +138,7 @@ public class PlaytimeService implements IPlaytimeService {
     @Override
     public Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
         log.info("PlaytimeServive - searchPlaytimes() - start");
+        page -= 1;
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("startDate and endDate cannot be null");
         }
