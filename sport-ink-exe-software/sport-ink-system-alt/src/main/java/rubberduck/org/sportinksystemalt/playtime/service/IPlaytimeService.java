@@ -5,6 +5,7 @@ import rubberduck.org.sportinksystemalt.playtime.domain.dto.CreatePlaytimeReques
 import rubberduck.org.sportinksystemalt.playtime.domain.dto.PlaytimeResponse;
 import rubberduck.org.sportinksystemalt.playtime.domain.entity.Playtime;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,4 +19,11 @@ public interface IPlaytimeService {
     Playtime findPlaytimeById(UUID id);
 
     List<Playtime> getAllPlaytimesOfUser(String username);
+
+    Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward,
+                                           LocalDateTime startDate, LocalDateTime endDate,
+                                           int page, int size);
+
+    PlaytimeResponse joinPlaytime(String username, UUID playtimeId);
+
 }

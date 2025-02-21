@@ -60,6 +60,9 @@ public class PlaytimeService implements IPlaytimeService {
             throw new IllegalArgumentException("startTime must be before endTime");
         }
 
+        if (request.startTime().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("startTime cannot be sooner than present");
+        }
         if (request.maxPlayers() <= 0) {
             throw new IllegalArgumentException("maxPlayers must be greater than 0");
         }
@@ -68,13 +71,13 @@ public class PlaytimeService implements IPlaytimeService {
         // Get playfield by playfieldId
         Playfield playfield = playfieldService.findPlayfieldById(request.playfieldId());
         if (playfield == null) {
-            throw new RuntimeException("Playfield not found with id: " + request.playfieldId());
+            throw new IllegalArgumentException("Playfield not found with id: " + request.playfieldId());
         }
         //Check the playfield whether it supports selected sport or not
         PlayfieldSport playfieldSport = playfield.getPlayfieldSportList().stream()
                 .filter(ps -> ps.getSport() != null && ps.getSport().getId().equals(request.sportId()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Playfield does not support the given sport id: " + request.sportId()));
+                .orElseThrow(() -> new IllegalArgumentException("Playfield does not support the given sport id: " + request.sportId()));
 
         Playtime playtime = Playtime.builder()
                 .playfieldSport(playfieldSport)
@@ -90,7 +93,7 @@ public class PlaytimeService implements IPlaytimeService {
         try {
             bookmaker = userService.findUserByUsername(username);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid user provided in username: " + username, e);
+            throw new IllegalArgumentException("Invalid user provided in username: " + username, e);
         }
         playtime.setBookmaker(bookmaker);
 
@@ -111,7 +114,7 @@ public class PlaytimeService implements IPlaytimeService {
     public PlaytimeResponse getPlaytimeById(UUID id) {
         log.info("PlaytimeServiceImpl - getPlaytimeById() - start");
         Playtime playtime = playtimeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Playdate does not exist! id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Playdate does not exist! id: " + id));
         log.info("PlaytimeService - getPlaytimeById() - end");
         return mapToPlaytimeResponse(playtime);
     }
@@ -119,6 +122,10 @@ public class PlaytimeService implements IPlaytimeService {
     @Override
     public Page<PlaytimeResponse> getPlaytimesPageable(int page, int size) {
         log.info("PlaytimeService - getPlaytimesPageable() - start");
+        page -= 1;
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Page and size parameters must be non-negative");
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<Playtime> playdatePage = playtimeRepository.findAll(pageable);
 
@@ -130,11 +137,81 @@ public class PlaytimeService implements IPlaytimeService {
     }
 
     @Override
+    public Page<PlaytimeResponse> searchPlaytimes(UUID sportId, String city, String district, String ward, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+        log.info("PlaytimeService - searchPlaytimes() - start");
+        page -= 1;
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("startDate and endDate cannot be null");
+        }
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Page and size parameters must be non-negative");
+        }
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("startDate must be before endDate");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Playtime> playtimesPage = playtimeRepository.searchPlaytimes(sportId, city, district, ward, startDate, endDate, pageable);
+
+        if (playtimesPage.isEmpty()) {
+            throw new IllegalArgumentException("Cannot find available play time.");
+        }
+
+        List<PlaytimeResponse> responses = playtimesPage.getContent().stream()
+                .map(this::mapToPlaytimeResponse)
+                .collect(Collectors.toList());
+        log.info("PlaytimeService - searchPlaytimes() - end");
+        return new PageImpl<>(responses, pageable, playtimesPage.getTotalElements());
+    }
+
+    @Override
+    public PlaytimeResponse joinPlaytime(String username, UUID playtimeId) {
+        log.info("PlaytimeService - joinPlaytime() - start");
+        Playtime playtime = playtimeRepository.findById(playtimeId)
+                .orElseThrow(() -> new RuntimeException("Playtime does not exist with id: " + playtimeId));
+
+        if (playtime.getStatus() != PlaytimeStatus.OPEN) {
+            throw new RuntimeException("Playtime is not available to join.");
+        }
+
+        if (playtime.getParticipants().size() >= playtime.getMaxPlayers()) {
+            throw new RuntimeException("Playtime is full.");
+        }
+
+        boolean alreadyJoined = playtime.getParticipants().stream()
+                .anyMatch(p -> p.getUser().getUserId().equals(userService.findUserByUsername(username).getUserId()));
+        if (alreadyJoined) {
+            throw new RuntimeException("User has joined this playtime.");
+        }
+
+        User user = userService.findUserByUsername(username);
+        PlaytimeParticipant participant = PlaytimeParticipant.builder()
+                .playtime(playtime)
+                .user(user)
+                .joinedAt(LocalDateTime.now())
+                .role(ParticipantRole.MEMBER)
+                .build();
+
+        playtime.getParticipants().add(participant);
+
+        Playtime updatedPlaytime = playtimeRepository.save(playtime);
+
+        if (updatedPlaytime.getParticipants().size() >= updatedPlaytime.getMaxPlayers()) {
+            updatedPlaytime.setStatus(PlaytimeStatus.FULL);
+            updatedPlaytime = playtimeRepository.save(updatedPlaytime);
+        }
+
+        log.info("PlaytimeService - joinPlaytime() - end");
+        return mapToPlaytimeResponse(updatedPlaytime);
+
+    }
+
+    @Override
     public void deletePlaytime(UUID id) {
         log.info("PlaytimeService - deletePlaytime() - start");
 
         Playtime playtime = playtimeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Playdate does not exist! id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Playdate does not exist! id: " + id));
         playtime.setStatus(PlaytimeStatus.CLOSED);
         log.info("PlaytimeService - deletePlaytime() - end");
 
