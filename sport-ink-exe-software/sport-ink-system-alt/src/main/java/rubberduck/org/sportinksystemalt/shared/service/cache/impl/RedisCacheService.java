@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.shared.service.cache.CacheService;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -72,5 +73,9 @@ public class RedisCacheService implements CacheService {
     @Override
     public void clear() {
         Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().serverCommands();
+        Set<String> keys = redisTemplate.keys("*");
+        if (!keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package rubberduck.org.sportinksystemalt.playtime.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import rubberduck.org.sportinksystemalt.administration.domain.entity.Sport;
@@ -33,6 +34,7 @@ public class Playtime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playfield_sport_id", nullable = false)
+    @ToString.Exclude
     private PlayfieldSport playfieldSport;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,13 +48,13 @@ public class Playtime {
     @ToString.Exclude
     private Sport sport;
 
-
+    private String title;
 
     // bookmaker
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookmaker_id", nullable = false)
+    @ToString.Exclude
     private User bookmaker;
-
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
@@ -68,6 +70,7 @@ public class Playtime {
     private PlaytimeStatus status;
 
     @OneToMany(mappedBy = "playtime", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     @ToString.Exclude
     private List<PlaytimeParticipant> participants;
 

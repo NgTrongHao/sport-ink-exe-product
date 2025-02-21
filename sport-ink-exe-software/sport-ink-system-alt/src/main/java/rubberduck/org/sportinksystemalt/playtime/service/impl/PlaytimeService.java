@@ -20,6 +20,7 @@ import rubberduck.org.sportinksystemalt.playtime.domain.entity.PlaytimeStatus;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeParticipantRepository;
 import rubberduck.org.sportinksystemalt.playtime.repository.PlaytimeRepository;
 import rubberduck.org.sportinksystemalt.playtime.service.IPlaytimeService;
+import rubberduck.org.sportinksystemalt.shared.exception.handler.ResourceNotFoundException;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
@@ -159,5 +160,17 @@ public class PlaytimeService implements IPlaytimeService {
                 playtime.getStatus(),
                 participantResponses
         );
+    }
+
+    @Override
+    public Playtime findPlaytimeById(UUID id) {
+        return playtimeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PlaytimeId", "id", id.toString()));
+    }
+
+    @Override
+    public List<Playtime> getAllPlaytimesOfUser(String username) {
+        User user = userService.findUserByUsername(username);
+        return playtimeRepository.findByParticipantsUser(user);
     }
 }

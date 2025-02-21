@@ -21,4 +21,5 @@ public record PlaytimeResponse(
         @Positive int maxPlayers,
         @NotEmpty PlaytimeStatus status,
         @NotNull List<PlaytimeParticipantResponse> participants
-) {}
+) implements java.io.Serializable {
+}
