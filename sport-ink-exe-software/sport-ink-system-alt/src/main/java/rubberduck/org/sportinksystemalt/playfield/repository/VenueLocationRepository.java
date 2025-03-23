@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.VenueLocation;
+import rubberduck.org.sportinksystemalt.user.domain.entity.VenueOwner;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,4 +37,5 @@ public interface VenueLocationRepository extends JpaRepository<VenueLocation, UU
     @Query("SELECT v FROM VenueLocation v WHERE LOWER(CONCAT(v.ward, ' ', v.district, ' ', v.city)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     List<VenueLocation> searchByAddress(@Param("searchTerm") String searchTerm);
 
+    List<VenueLocation> findAllByVenueOwner(VenueOwner venueOwner);
 }

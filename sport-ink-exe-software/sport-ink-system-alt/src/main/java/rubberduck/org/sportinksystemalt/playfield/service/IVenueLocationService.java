@@ -4,6 +4,7 @@ import rubberduck.org.sportinksystemalt.playfield.domain.dto.CreateVenueLocation
 import rubberduck.org.sportinksystemalt.playfield.domain.dto.VenueLocationResponse;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.VenueLocation;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface IVenueLocationService {
@@ -16,4 +17,6 @@ public interface IVenueLocationService {
     void approveVenueLocation(UUID venueLocationId);
 
     VenueLocationResponse getVenueLocationById(UUID venueLocationId);
+    
+    List<VenueLocationResponse> getVenueLocationsByOwner(String username);
 }

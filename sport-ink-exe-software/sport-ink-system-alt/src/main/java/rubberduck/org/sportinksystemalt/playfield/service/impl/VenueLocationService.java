@@ -131,4 +131,41 @@ public class VenueLocationService implements IVenueLocationService {
                 openingHours.getClosingTime()
         );
     }
+
+    // Add this method to the VenueLocationService class
+    
+    @Override
+    public List<VenueLocationResponse> getVenueLocationsByOwner(String username) {
+        // Get the venue owner by username
+        var venueOwner = venueOwnerRepository.findByUser_Username(username);
+        if (venueOwner == null) {
+            throw new IllegalArgumentException("Venue owner not found");
+        }
+        
+        // Find all venue locations by venue owner
+        List<VenueLocation> venueLocations = venueLocationRepository.findAllByVenueOwner(venueOwner);
+        
+        // Convert to DTOs
+        return venueLocations.stream()
+                .map(venueLocation -> {
+                    List<OpeningHoursDTO> openingHoursDTOs = venueLocation.getOpeningHoursList().stream()
+                            .map(this::convertToOpeningHoursDTO)
+                            .toList();
+                    
+                    return new VenueLocationResponse(
+                            venueLocation.getId(),
+                            venueLocation.getAddress(),
+                            venueLocation.getWard(),
+                            venueLocation.getDistrict(),
+                            venueLocation.getCity(),
+                            venueLocation.getLatitude(),
+                            venueLocation.getLongitude(),
+                            venueLocation.getDescription(),
+                            venueLocation.getImageUrls(),
+                            venueLocation.getPhoneContact(),
+                            openingHoursDTOs
+                    );
+                })
+                .collect(Collectors.toList());
+    }
 }
