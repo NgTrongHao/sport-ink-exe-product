@@ -45,8 +45,14 @@ public class UserService implements IUserService {
     public UserProfileResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
         User user = findUserByUsername(username);
         updateUserFields(user, request);
-        userRepository.save(user);
-        return mapToUserProfileResponse(user);
+        // Save the updated user
+        User savedUser = userRepository.save(user);
+
+        // Invalidate token to reflect changes in future requests
+        invalidateToken(username);
+
+        // Return the updated user profile
+        return mapToUserProfileResponse(savedUser);
     }
 
     private void updateUserFields(User user, UpdateUserProfileRequest request) {
