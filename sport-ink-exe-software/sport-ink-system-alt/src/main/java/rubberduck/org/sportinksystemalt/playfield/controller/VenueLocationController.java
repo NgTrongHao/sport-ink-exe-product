@@ -12,6 +12,7 @@ import rubberduck.org.sportinksystemalt.playfield.service.IVenueLocationService;
 import rubberduck.org.sportinksystemalt.shared.common.annotation.CurrentUser;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,6 +49,20 @@ public class VenueLocationController {
                 .code(200)
                 .message("Venue location retrieved successfully")
                 .data(venueLocationService.getVenueLocationById(venueLocationId))
+                .build());
+    }
+
+    @GetMapping("/owner")
+    @PreAuthorize("hasAuthority('VENUE_OWNER')")
+    @Operation(
+            summary = "Get Venue Locations By Owner REST API",
+            description = "Get Venue Locations By Owner REST API is used to get all venue locations owned by the current user."
+    )
+    public ResponseEntity<ApiResponse<List<VenueLocationResponse>>> getVenueLocationsByOwner(@CurrentUser String username) {
+        return ResponseEntity.ok(ApiResponse.<List<VenueLocationResponse>>builder()
+                .code(200)
+                .message("Venue locations retrieved successfully")
+                .data(venueLocationService.getVenueLocationsByOwner(username))
                 .build());
     }
 
