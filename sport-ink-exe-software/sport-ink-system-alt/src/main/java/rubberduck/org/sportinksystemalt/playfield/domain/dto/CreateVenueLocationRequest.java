@@ -20,12 +20,12 @@ public record CreateVenueLocationRequest(
         @NotEmpty
         String ward,
 
-        @NotEmpty
-        @Pattern(regexp = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$")
+        //@NotEmpty
+        //@Pattern(regexp = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$")
         Double latitude,
 
-        @NotEmpty
-        @Pattern(regexp = "^[-+]?((1[0-7]\\d(\\.\\d+)?)|(180(\\.0+)?))$")
+        //@NotEmpty
+        //@Pattern(regexp = "^[-+]?((1[0-7]\\d(\\.\\d+)?)|(180(\\.0+)?))$")
         Double longitude,
         String description,
         List<String> imageUrls,
