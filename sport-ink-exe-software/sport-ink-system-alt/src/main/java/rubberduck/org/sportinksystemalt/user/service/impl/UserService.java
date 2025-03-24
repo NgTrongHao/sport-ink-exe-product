@@ -1,5 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.service.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,17 +42,18 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    @Cacheable(value = "user", key = "#username")
+    @CacheEvict(value = "user", key = "#username")
+
     public UserProfileResponse updateUserProfile(String username, UpdateUserProfileRequest request) {
         User user = findUserByUsername(username);
         updateUserFields(user, request);
         // Save the updated user
         User savedUser = userRepository.save(user);
-
         // Invalidate token to reflect changes in future requests
         invalidateToken(username);
-
-        // Return the updated user profile
+        // This is needed because the method is annotated with @Cacheable in getUserProfile
+        tokenProvider.invalidateAccessToken(username);
+        // Return the updated user profile - get fresh data from DB
         return mapToUserProfileResponse(savedUser);
     }
 
