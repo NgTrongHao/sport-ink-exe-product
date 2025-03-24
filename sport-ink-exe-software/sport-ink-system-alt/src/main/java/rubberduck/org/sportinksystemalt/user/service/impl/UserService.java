@@ -111,7 +111,7 @@ public class UserService implements IUserService {
     public UserWithTokenResponse createPlayerProfile(String username, CreatePlayerProfileRequest request) {
         User user = findUserByUsername(username);
         validateRegistrationUserState(user);
-        updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.bio(), Role.PLAYER);
+        updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.phoneNumber(), request.bio(), Role.PLAYER);
         createOrUpdatePlayer(user, request);
 
         return generateUserWithTokenResponse(user);
@@ -122,7 +122,7 @@ public class UserService implements IUserService {
     public UserWithTokenResponse createVenueOwnerProfile(String username, CreateVenueOwnerProfileRequest request) {
         User user = findUserByUsername(username);
         validateRegistrationUserState(user);
-        updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.bio(), Role.VENUE_OWNER);
+        updateUserProfile(user, request.profilePicture(), request.coverPicture(), request.phoneNumber(), request.bio(), Role.VENUE_OWNER);
         createOrUpdateVenueOwner(user, request);
 
         return generateUserWithTokenResponse(user);
@@ -152,10 +152,11 @@ public class UserService implements IUserService {
         }
     }
 
-    private void updateUserProfile(User user, String profilePicture, String coverPicture, String bio, Role role) {
+    private void updateUserProfile(User user, String profilePicture, String coverPicture, String phoneNumber, String bio, Role role) {
         user.setProfilePicture(profilePicture);
         user.setCoverPicture(coverPicture);
         user.setBio(bio);
+        user.setPhoneNumber(phoneNumber);
         user.setRoles(new HashSet<>(Set.of(role)));
         userRepository.save(user);
     }
