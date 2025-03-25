@@ -28,6 +28,7 @@ public class VenueLocationService implements IVenueLocationService {
     @Override
     public void addVenueLocation(String username, CreateVenueLocationRequest request) {
         VenueLocation venueLocation = VenueLocation.builder()
+                .name(request.name())
                 .address(request.address())
                 .ward(request.ward())
                 .district(request.district())
@@ -75,6 +76,7 @@ public class VenueLocationService implements IVenueLocationService {
 
         return new VenueLocationResponse(
                 venueLocation.getId(),
+                venueLocation.getName(),
                 venueLocation.getAddress(),
                 venueLocation.getWard(),
                 venueLocation.getDistrict(),
@@ -154,6 +156,7 @@ public class VenueLocationService implements IVenueLocationService {
                     
                     return new VenueLocationResponse(
                             venueLocation.getId(),
+                            venueLocation.getName(),
                             venueLocation.getAddress(),
                             venueLocation.getWard(),
                             venueLocation.getDistrict(),
