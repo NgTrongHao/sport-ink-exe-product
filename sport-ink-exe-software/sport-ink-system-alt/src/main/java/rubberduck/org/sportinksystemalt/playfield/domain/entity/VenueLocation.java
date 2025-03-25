@@ -25,6 +25,8 @@ public class VenueLocation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String name;
+
     @Column(nullable = false)
     private String address;
 
