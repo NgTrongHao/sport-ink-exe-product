@@ -1,5 +1,6 @@
 package rubberduck.org.sportinksystemalt.user.service;
 
+import org.springframework.data.domain.Page;
 import rubberduck.org.sportinksystemalt.user.domain.dto.*;
 import rubberduck.org.sportinksystemalt.user.domain.entity.User;
 import rubberduck.org.sportinksystemalt.user.domain.entity.VenueOwner;
@@ -19,4 +20,5 @@ public interface IUserService {
 
     User findUserByUsername(String username);
 
+    Page<UserListResponse> getAllUsers(int page, int size);
 }
