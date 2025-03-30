@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
-import rubberduck.org.sportinksystemalt.shared.domain.PageResponse;
 import rubberduck.org.sportinksystemalt.user.domain.dto.UserListResponse;
 import rubberduck.org.sportinksystemalt.user.service.IUserService;
 
