@@ -5,7 +5,11 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
+import rubberduck.org.sportinksystemalt.shared.domain.PageResponse;
 import rubberduck.org.sportinksystemalt.shared.exception.handler.ResourceNotFoundException;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.*;
@@ -204,6 +208,24 @@ public class UserService implements IUserService {
 
     private void invalidateToken(String username) {
         tokenProvider.invalidateAccessToken(username);
+    }
+
+    @Override
+    public Page<UserListResponse> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+        
+        return userPage.map(user -> new UserListResponse(
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhoneNumber(),
+                user.getRoles(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        ));
     }
 
     private UserWithTokenResponse generateUserWithTokenResponse(User user) {
