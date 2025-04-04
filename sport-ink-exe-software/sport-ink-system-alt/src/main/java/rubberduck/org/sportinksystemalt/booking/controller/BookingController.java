@@ -3,10 +3,12 @@ package rubberduck.org.sportinksystemalt.booking.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rubberduck.org.sportinksystemalt.booking.domain.dto.BookingResponse;
 import rubberduck.org.sportinksystemalt.booking.domain.dto.CreateBookingRequest;
 import rubberduck.org.sportinksystemalt.booking.domain.dto.TimeSlot;
 import rubberduck.org.sportinksystemalt.booking.service.IBookingService;
@@ -28,7 +30,18 @@ public class BookingController {
     }
 
     @GetMapping("/owner/get-all/{playfield-id}")
-    public void getAllBookingsByPlayfieldId(@PathVariable("playfield-id") UUID playfieldId) {
+    public ResponseEntity<ApiResponse<Page<BookingResponse>>> getAllBookingsByPlayfieldId(
+            @PathVariable("playfield-id") UUID playfieldId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.<Page<BookingResponse>>builder()
+                        .code(200)
+                        .message("Bookings fetched successfully")
+                        .data(bookingService.getAllBookingsByPlayfieldId(playfieldId, page, size))
+                        .build()
+        );
     }
 
     @GetMapping("/{playfield-id}/booked-slots")
@@ -57,6 +70,25 @@ public class BookingController {
                         .message("Booking created successfully")
                         .build(),
                 HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("/get-all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(
+            summary = "Get All Bookings REST API",
+            description = "Get All Bookings REST API is used to fetch all bookings with pagination. Only accessible by ADMIN."
+    )
+    public ResponseEntity<ApiResponse<Page<BookingResponse>>> getAllBookings(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.<Page<BookingResponse>>builder()
+                        .code(200)
+                        .message("Bookings fetched successfully")
+                        .data(bookingService.getAllBookings(page, size))
+                        .build()
         );
     }
 }

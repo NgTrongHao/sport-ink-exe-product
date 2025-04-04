@@ -1,5 +1,7 @@
 package rubberduck.org.sportinksystemalt.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,4 +39,6 @@ public interface BookingRepository extends JpaRepository<Booking, UUID> {
             "ORDER BY bookingCount DESC")
     Map<String, Long> countBookingsPerVenue(@Param("startDate") LocalDate startDate,
                                             @Param("endDate") LocalDate endDate);
+
+    Page<Booking> findAllByBookingPlayfield_Id(UUID playfieldId, Pageable pageable);
 }
