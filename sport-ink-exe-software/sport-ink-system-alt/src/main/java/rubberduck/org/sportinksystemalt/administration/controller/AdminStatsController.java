@@ -1,11 +1,15 @@
 package rubberduck.org.sportinksystemalt.administration.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import rubberduck.org.sportinksystemalt.administration.domain.dto.VenueRevenueDto;
 import rubberduck.org.sportinksystemalt.administration.service.IAdminStatsService;
 import rubberduck.org.sportinksystemalt.shared.domain.ApiResponse;
 
@@ -79,6 +83,26 @@ public class AdminStatsController {
                         .code(200)
                         .message("Top venues retrieved successfully")
                         .data(topVenues)
+                        .build()
+        );
+    }
+
+    @GetMapping("/revenue-of-venues-by-date")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(
+            summary = "Get Revenue Of Venues By Date REST API",
+            description = "Get Revenue Of Venues By Date REST API is used to fetch the revenue of venues by date. Only accessible by ADMIN."
+    )
+    public ResponseEntity<ApiResponse<Page<VenueRevenueDto>>> getRevenueOfVenuesByDate(
+            @RequestParam String date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.<Page<VenueRevenueDto>>builder()
+                        .code(200)
+                        .message("Revenue of venues by date fetched successfully")
+                        .data(adminStatsService.getRevenueOfVenuesByDate(date, page, size))
                         .build()
         );
     }

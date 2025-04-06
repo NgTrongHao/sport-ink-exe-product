@@ -17,13 +17,13 @@ import rubberduck.org.sportinksystemalt.user.service.IUserService;
 @RequestMapping("/api/admin")
 @Tag(name = "Admin", description = "Admin REST API")
 public class AdminController {
-    
+
     private final IUserService userService;
-    
+
     public AdminController(IUserService userService) {
         this.userService = userService;
     }
-    
+
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(
@@ -33,7 +33,7 @@ public class AdminController {
     public ResponseEntity<ApiResponse<Page<UserListResponse>>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        
+
         return ResponseEntity.ok(
                 ApiResponse.<Page<UserListResponse>>builder()
                         .code(200)

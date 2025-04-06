@@ -70,6 +70,10 @@ public class VenueLocationService implements IVenueLocationService {
     public VenueLocationResponse getVenueLocationById(UUID venueLocationId) {
         VenueLocation venueLocation = findVenueLocationById(venueLocationId);
 
+        return getVenueLocationResponse(venueLocation);
+    }
+
+    private VenueLocationResponse getVenueLocationResponse(VenueLocation venueLocation) {
         List<OpeningHoursDTO> openingHoursDTOs = venueLocation.getOpeningHoursList().stream()
                 .map(this::convertToOpeningHoursDTO)
                 .toList();
@@ -149,26 +153,7 @@ public class VenueLocationService implements IVenueLocationService {
         
         // Convert to DTOs
         return venueLocations.stream()
-                .map(venueLocation -> {
-                    List<OpeningHoursDTO> openingHoursDTOs = venueLocation.getOpeningHoursList().stream()
-                            .map(this::convertToOpeningHoursDTO)
-                            .toList();
-                    
-                    return new VenueLocationResponse(
-                            venueLocation.getId(),
-                            venueLocation.getName(),
-                            venueLocation.getAddress(),
-                            venueLocation.getWard(),
-                            venueLocation.getDistrict(),
-                            venueLocation.getCity(),
-                            venueLocation.getLatitude(),
-                            venueLocation.getLongitude(),
-                            venueLocation.getDescription(),
-                            venueLocation.getImageUrls(),
-                            venueLocation.getPhoneContact(),
-                            openingHoursDTOs
-                    );
-                })
+                .map(this::getVenueLocationResponse)
                 .collect(Collectors.toList());
     }
 }

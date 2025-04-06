@@ -1,11 +1,17 @@
 package rubberduck.org.sportinksystemalt.booking.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import rubberduck.org.sportinksystemalt.administration.service.ISportService;
+import rubberduck.org.sportinksystemalt.booking.domain.dto.BookingResponse;
 import rubberduck.org.sportinksystemalt.booking.domain.dto.CreateBookingRequest;
 import rubberduck.org.sportinksystemalt.booking.domain.dto.TimeSlot;
 import rubberduck.org.sportinksystemalt.booking.domain.entity.Booking;
 import rubberduck.org.sportinksystemalt.booking.domain.entity.BookingStatus;
+import rubberduck.org.sportinksystemalt.booking.domain.mapper.BookingMapper;
 import rubberduck.org.sportinksystemalt.booking.repository.BookingRepository;
 import rubberduck.org.sportinksystemalt.booking.service.IBookingService;
 import rubberduck.org.sportinksystemalt.playfield.domain.entity.Playfield;
@@ -58,6 +64,20 @@ public class BookingService implements IBookingService {
                         .endTime(booking.getBookingTime().plusMinutes(booking.getBookingDuration()))
                         .build())
                 .toList();
+    }
+
+    @Override
+    public Page<BookingResponse> getAllBookingsByPlayfieldId(UUID playfieldId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("startDateTime").descending());
+        return bookingRepository.findAllByBookingPlayfield_Id(playfieldId, pageable)
+                .map(BookingMapper::toBookingResponse);
+    }
+
+    @Override
+    public Page<BookingResponse> getAllBookings(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("startDateTime").descending());
+        return bookingRepository.findAll(pageable)
+                .map(BookingMapper::toBookingResponse);
     }
 
     private Booking buildBooking(User user, Playfield playfield, CreateBookingRequest request, Double bookingPrice) {

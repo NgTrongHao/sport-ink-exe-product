@@ -1,5 +1,8 @@
 package rubberduck.org.sportinksystemalt.administration.service;
 
+import org.springframework.data.domain.Page;
+import rubberduck.org.sportinksystemalt.administration.domain.dto.VenueRevenueDto;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -13,4 +16,6 @@ public interface IAdminStatsService {
     Map<LocalDate, Long> getBookingsPerDay(String startDate, String endDate);
 
     Map<String, Long> getTopVenues(String startDate, String endDate);
+
+    Page<VenueRevenueDto> getRevenueOfVenuesByDate(String date, int page, int size);
 }

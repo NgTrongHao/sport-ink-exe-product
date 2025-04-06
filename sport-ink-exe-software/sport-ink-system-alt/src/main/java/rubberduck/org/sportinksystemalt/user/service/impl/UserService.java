@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import rubberduck.org.sportinksystemalt.shared.domain.AccessToken;
-import rubberduck.org.sportinksystemalt.shared.domain.PageResponse;
 import rubberduck.org.sportinksystemalt.shared.exception.handler.ResourceNotFoundException;
 import rubberduck.org.sportinksystemalt.shared.service.token.TokenProvider;
 import rubberduck.org.sportinksystemalt.user.domain.dto.*;
