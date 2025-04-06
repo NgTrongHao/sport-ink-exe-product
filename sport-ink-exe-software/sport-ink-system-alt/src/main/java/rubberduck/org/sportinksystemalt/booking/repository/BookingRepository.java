@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import rubberduck.org.sportinksystemalt.administration.domain.dto.VenueRevenueDto;
 import rubberduck.org.sportinksystemalt.booking.domain.entity.Booking;
 
 import java.time.LocalDate;
@@ -41,4 +42,12 @@ public interface BookingRepository extends JpaRepository<Booking, UUID> {
                                             @Param("endDate") LocalDate endDate);
 
     Page<Booking> findAllByBookingPlayfield_Id(UUID playfieldId, Pageable pageable);
+
+    @Query("SELECT new rubberduck.org.sportinksystemalt.administration.domain.dto.VenueRevenueDto(" +
+            "b.bookingPlayfield.venueLocation.id, SUM(b.bookingPrice)) " +
+            "FROM Booking b " +
+            "WHERE b.bookingDate = :date " +
+            "GROUP BY b.bookingPlayfield.venueLocation.id")
+    Page<VenueRevenueDto> findRevenueOfVenuesByDate(@Param("date") LocalDate date, Pageable pageable);
+
 }

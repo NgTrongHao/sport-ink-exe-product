@@ -1,6 +1,10 @@
 package rubberduck.org.sportinksystemalt.administration.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rubberduck.org.sportinksystemalt.administration.domain.dto.VenueRevenueDto;
 import rubberduck.org.sportinksystemalt.administration.service.IAdminStatsService;
 import rubberduck.org.sportinksystemalt.booking.repository.BookingRepository;
 import rubberduck.org.sportinksystemalt.chatting.repository.ChatMessageRepository;
@@ -46,6 +50,13 @@ public class AdminStatsService implements IAdminStatsService {
     @Override
     public Map<String, Long> getTopVenues(String startDate, String endDate) {
         return bookingRepository.countBookingsPerVenue(parseToLocalDate(startDate), parseToLocalDate(endDate));
+    }
+
+    @Override
+    public Page<VenueRevenueDto> getRevenueOfVenuesByDate(String date, int page, int size) {
+        LocalDate parsedDate = parseToLocalDate(date);
+        Pageable pageable = PageRequest.of(page, size);
+        return bookingRepository.findRevenueOfVenuesByDate(parsedDate, pageable);
     }
 
     private LocalDate parseToLocalDate(String dateStr) {
